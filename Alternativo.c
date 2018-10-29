@@ -93,7 +93,7 @@ Token verifyToken()
     FILE *codFonte;
     char c;
     char buffer[20];
-    int estado,coluna=0,linha=0;
+    int estado,coluna=0,linha=0,tmp;
     Token token;
     codFonte=fopen("teste.txt", "r");
     if(codFonte == NULL){
@@ -151,11 +151,12 @@ Token verifyToken()
             case 2:
                 // FINAL
                 ungetc(c,codFonte);
-                if(isPalavraRes(buffer){
+                tmp = isPalavraRes(buffer); 
+                if(tmp){
                     //case seja palavra reservadoa identificar qual a palavra reservada
+                    createToken(tmp, buffer);
                 }else {
-                    strcpy(token.s,buffer);
-                    print("<ID, %s>\n", token.s);
+                    createToken(0, buffer);
                 }
                 return token;
                 break;
@@ -185,8 +186,7 @@ Token verifyToken()
             case 5:
                    //FINAL
                 ungetc(c,codFonte);
-                token.cat = 3;
-                //printaToken();
+                createToken(3,buffer);
                 return token;   
                 break;
             case 6:
@@ -201,15 +201,12 @@ Token verifyToken()
                 }
                 break;
             case 7:
-                montaToken(buffer);
-                printaToken();
-                estado = 0;
+                //FINAL NUMERO REAL
+                createToken(CT_R,buffer);
                 break;
             case 8:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer(&i);
-                estado = 0;
+                //FINAL MAIS
+                createToken(OP,buffer)
                 break;
             case 9:
                 c = getCaracter(codFonte,coluna,linha);
@@ -223,16 +220,12 @@ Token verifyToken()
                 }
                 break;
             case 10:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL MENOR IGUAL
+                createToken(OP,buffer);
                 break;
             case 11:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL MENOR 
+                ungetc(c,codFonte);
                 break;
             case 12:
                 c = getCaracter(codFonte,coluna,linha);
@@ -241,27 +234,21 @@ Token verifyToken()
                     i++;
                     estado = 13;
                 }else {
-                    ungetc(codFonte);
+                    ungetc(c, codFonte);
                     estado = 14;
                 }
                 break;
             case 13:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL MAIOROUIGUAL
+                createToken(OP,buffer);
                 break;
             case 14:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL MAIOR
+                createToken(OP, buffer);
                 break;
             case 15:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL MENOS
+                createToken(OP,buffer);
                 break;
             case 16:
                 c = getCaracter(codFonte,coluna,linha);
@@ -304,10 +291,8 @@ Token verifyToken()
                 }else ERRO();
                 break;
             case 20:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL .and.
+                createToken(LOG, buffer);
                 break;
             case 21:
                 c = getCaracter(codFonte,coluna,linha);
@@ -350,39 +335,30 @@ Token verifyToken()
                 }else ERRO();
                 break;
             case 26:
-                c = getCaracter(codFonte,coluna,linha);
+                //FINAL .OR.
+                createToken(LOG, buffer);
+                break;
+            case 27:
+                //FINAL .not.
+                createToken(LOG, buffer);
+                break;
+            case 28:
+                  c = getCaracter(codFonte,coluna,linha);
                 if(c == '='){
                     buffer[i] = c;
                     i++;
-                    estado = 27;
+                    estado = 29;
                 }else {
-                    estado = 28;
+                    estado = 30;
                     ungetc(codFonte);
                 }
                 break;
-            case 27:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
-                break;
-            case 28:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
-                break;
             case 29:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                createToken(OP,buffer);
                 break;
             case 30:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                ungetc(c,codFonte);
+                createToken(OP,buffer);
                 break;
             case 31:
                 c = getCaracter(codFonte,coluna,linha);
@@ -391,7 +367,7 @@ Token verifyToken()
                 }
                 break;
             case 32:
-                estado = 0;
+                createToken(CT_S, buffer);
                 break;
             case 33:
                 c = getCaracter(codFonte,coluna,linha);
@@ -409,11 +385,23 @@ Token verifyToken()
                 estado = 0;
                 break;
             case 36:
-                montaToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                createToken(OP, buffer);
                 break;
+            case 37:
+                createToken(OP, buffer);
+                break;
+            case 38:
+                createToken(OP, buffer);
+                break;
+            case 39:
+                c = getCaracter(codFonte,coluna,linha);
+                estado = 40;
+            case 40:
+                 c = getCaracter(codFonte,coluna,linha);
+                estado = 41;
+            case 41:
+                createToken(CT_C, buffer);
+                
         }//fim switch
 
 
