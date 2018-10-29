@@ -9,10 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79bdbcea-6398-4e97-87c0-7e483131fd02" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Alternativo.c" beforeDir="false" afterPath="$PROJECT_DIR$/Alternativo.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/analex.h" beforeDir="false" afterPath="$PROJECT_DIR$/analex.h" afterDir="false" />
-    </list>
+    <list default="true" id="79bdbcea-6398-4e97-87c0-7e483131fd02" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -32,16 +29,16 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Alternativo.c" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Alternativo.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Alternativo.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="552">
-              <caret line="81" selection-start-line="81" selection-end-line="81" />
+            <state relative-caret-position="221">
+              <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="analex.h" pinned="false" current-in-tab="true">
+      <file leaf-file-name="analex.h" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/analex.h">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="105">
@@ -58,8 +55,8 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Alternativo.c" />
         <option value="$PROJECT_DIR$/analex.h" />
+        <option value="$PROJECT_DIR$/Alternativo.c" />
       </list>
     </option>
   </component>
@@ -133,12 +130,12 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1540848853424</updated>
-      <workItem from="1540848856211" duration="1231000" />
+      <workItem from="1540848856211" duration="1968000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1231000" />
+    <option name="totallyTimeSpent" value="1968000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="754" extended-state="6" />
@@ -177,17 +174,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Alternativo.c">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="552">
-          <caret line="81" selection-start-line="81" selection-end-line="81" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/analex.h">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="11" lean-forward="true" selection-start-line="11" selection-end-line="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Alternativo.c">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="221">
+          <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
         </state>
       </provider>
     </entry>
