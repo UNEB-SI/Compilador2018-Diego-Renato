@@ -8,13 +8,13 @@
 #include <ctype.h>
 
 // CATEGORIA
-typedef enum{ ID = 1, PR, OP, CT_I, CT_R, CT_CH, CT_S } categoria;
+typedef enum{ ID, PR, OP, CT_I, CT_R, CT_CH, CT_S, LOG } categoria;
 
 // OPERADORES
-typedef enum{ MAIS = 1, MENOS, MAIOR, MENOR, MENOROUIGUAL, MAIOROUIGUAL, ABREPARENTESE, FECHAPARENTESE, AND, OR, NOT } operador;
+typedef enum{ MAIS, MENOS, MAIOR, MENOR, MENOROUIGUAL, MAIOROUIGUAL, ABREPARENTESE, FECHAPARENTESE, AND, OR, NOT } operador;
 
 // PALAVRAS RESERVADAS
-typedef  enum { BOOL = 1, CALL, CHAR, DISPLAY,ELSE, ENDFOR, ENDIF, ENDPROC, ENDPROG, ENDVAR, ENDWHILE, FOR,
+typedef  enum { BOOL, CALL, CHAR, DISPLAY,ELSE, ENDFOR, ENDIF, ENDPROC, ENDPROG, ENDVAR, ENDWHILE, FOR,
     FWD, ID, IF, INT,KEYBOARD, NOPARAM, PL, PROC,PROG, REAL, RETURN, VAR, WHILE } palavra;
 
 // ESTRUTURA DO TOKEN
@@ -26,6 +26,8 @@ typedef struct {
 
 // ASSINATURAS DE FUNÇÕES
 int isPalavraRes(char[] s);
+
+Token createToken(categoria type, void *buffer);
 
 Token new_token();
 

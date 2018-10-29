@@ -47,7 +47,45 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     }
 }
 
-token verifyToken() {
+Token createToken(categoria type, void *buffer)
+{
+    Token returnToken;
+    returnToken.cat = type;
+    if (type == ID)
+    {
+        strcpy(returnToken.cat, ID);
+        strcpy(returnToken.s, (char *) buffer);
+    }
+    else if (type == PR)
+    {
+        strcpy(returnToken.cat, PR);
+        strcpy(returnToken.s, (char *) buffer);
+    }
+    else if (type == CT_I)
+    {
+        strcpy(returnToken.cat, CT_I);
+        strcpy(returnToken.n, (int *) buffer);
+    }
+    else if (type == CT_R)
+    {
+        strcpy(returnToken.cat, CT_R);
+        strcpy(returnToken.r, (float *) buffer);
+    }
+    else if (type == LOG)
+    {
+        strcpy(returnToken.cat, LOG);
+        strcpy(returnToken.n, (int *) buffer);
+    }
+    else if (type == OP)
+    {
+        strcpy(returnToken.cat, OP);
+        strcpy(returnToken.s, (char *) buffer);
+    }
+    return returnToken;
+}
+
+Token verifyToken()
+{
     FILE *codFonte;
     char c;
     char buffer[20];
