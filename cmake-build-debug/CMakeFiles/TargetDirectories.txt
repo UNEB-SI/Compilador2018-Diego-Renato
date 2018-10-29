@@ -1,3 +1,0 @@
-C:/Users/Diego Malta/Desktop/compile/cmake-build-debug/CMakeFiles/compile.dir
-C:/Users/Diego Malta/Desktop/compile/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/Diego Malta/Desktop/compile/cmake-build-debug/CMakeFiles/rebuild_cache.dir
