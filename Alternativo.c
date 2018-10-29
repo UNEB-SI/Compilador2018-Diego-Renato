@@ -45,20 +45,7 @@ Token new_token();
 
 char getCaracter(FILE *p, int coluno,int linha);
 
-int buscaBinaria(char *palavra, char palavrasRes[][TAM] , int ini, int fim){
-
-    if(strcmp(palavra, palavrasRes[(ini + fim) / 2]) < 0){
-        if(ini >= fim) return -1;
-        return buscaBinaria(palavrasRes, palavra, ini, ((ini + fim) / 2) - 1);
-    }
-    else if(strcmp(palavra, palavrasRes[(ini + fim) / 2]) == 0){
-        return (ini + fim) / 2;
-    }
-    else{
-        if(ini >= fim) return -1;
-        return buscaBinaria(palavrasRes, palavra, ((ini + fim) / 2) + 1, fim);
-    }
-}
+int buscaBinaria(char *palavra, char palavrasRes[][TAM] , int ini, int fim)
 
 
 int main(){
@@ -418,39 +405,24 @@ char getCaracter(FILE *p, int *coluna,int *linha){
 return c;
 }
 
-/*
-int buscaBinaria(char *palavra, char palavrasRes[][TAM] , int ini, int fim){
-
-    if(strcmp(palavra, palavrasRes[(ini + fim) / 2]) < 0){
-        if(ini >= fim) return -1;
-        return buscaBinaria(palavrasRes, palavra, ini, ((ini + fim) / 2) - 1);
-    }
-    else if(strcmp(palavra, palavrasRes[(ini + fim) / 2]) == 0){
-        return (ini + fim) / 2;
-    }
-    else{
-        if(ini >= fim) return -1;
-        return buscaBinaria(palavrasRes, palavra, ((ini + fim) / 2) + 1, fim);
-    }
-}8*/
-
 
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
-    int temp;
-    temp = strcmp(strcmp(palavra, palavrasRes[(ini + fim) / 2]));
-    if(temp == 0 ){
+    int cmp;
+    cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
+    if(cmp == 0){
         //ACHOU
         return (ini + fim)/2;
     }
-    if(temp < 0){
+    if(cmp < 0){
             // palavra menor que a metade
         if(ini > fim) return -1;
-        return buscaBinaria(palavra, palavrasRes,ini , ini+fim -1)
+        return buscaBinaria(palavra, palavrasRes,ini , ini+fim -1);
     }
-    if (temp > 0){
+    if (cmp > 0){
             //palavra maior que a metade
             if(ini >= fim)
                 return -1;
-        return buscaBinaria(palavra,palavraRes,(ini + fim)/2 +1,fim);
+        return buscaBinaria(palavra,palavrasRes,(ini + fim)/2 +1,fim);
     }
 }
+
