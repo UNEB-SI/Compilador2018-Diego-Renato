@@ -84,6 +84,10 @@ Token createToken(categoria type, void *buffer)
     return returnToken;
 }
 
+void resetBuffer(int *i) {
+    *i = 0;
+}
+
 Token verifyToken()
 {
     FILE *codFonte;
@@ -96,14 +100,14 @@ Token verifyToken()
         printf("erro ao abrir o arquivo\n");
         return -1;
     }
-    i=0;
-    estado =0;
+    i = 0;
+    estado = 0;
     while(1){
         switch(estado)
         {
             case 0:
                 c = getCaracter(codFonte,coluna,linha);
-                buffer[i]=c;
+                buffer[i] = c;
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -141,56 +145,49 @@ Token verifyToken()
                 if(!(isalnum(c))){
                     estado = 2;
                 }
-                buffer[i] = c;
                 i++;
+                buffer[i] = c;
                 break;
             case 2:
                 // FINAL
                 ungetc(c,codFonte);
                 if(isPalavraRes(buffer){
                     //case seja palavra reservadoa identificar qual a palavra reservada
-
                 }else {
-                    strcpy(buffer,token.s);
+                    strcpy(token.s,buffer);
                     print("<ID, %s>\n", token.s);
                 }
-
-                resetBuffer(buffer);
-                estado = 0;
+                return token;
                 break;
             case 3:
                 c = getCaracter(codFonte,coluna,linha);
                 if(isdigit(c)){
-                    buffer[i] = c;
                     i++;
+                    buffer[i] = c;
                 }else if (c ==  '.'){
-                    buffer[i] = c;
                     i++;
+                    buffer[i] = c;
                     estado = 4;
-                }else {
-                    buffer[i] = c;
-                    i++;
+                }else 
                     estado = 5;
-                }
                 break;
             case 4:
                 c = getCaracter(codFonte,coluna,linha);
                 if(isdigit(c)){
-                    buffer[i] = c;
                     i++;
+                    buffer[i] = c;
                 }else {
-                    //volta dois caracteres do arquivo
+                    //volta um caracter do arquivo e vai para o estado 5
                     ungetc(c,codFonte);
                     estado = 5;
                 }
                 break;
             case 5:
+                   //FINAL
                 ungetc(c,codFonte);
                 token.cat = 3;
-
-                pritnf("<CT_I,%s>",token.cat);
-                printaToken();
-                estado = 0;
+                //printaToken();
+                return token;   
                 break;
             case 6:
                 c = getCaracter(codFonte,coluna,linha);
@@ -211,7 +208,7 @@ Token verifyToken()
             case 8:
                 montaToken(buffer);
                 printaToken();
-                resetBuffer();
+                resetBuffer(&i);
                 estado = 0;
                 break;
             case 9:
