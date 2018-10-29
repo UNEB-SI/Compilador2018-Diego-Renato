@@ -391,7 +391,8 @@ int main(){
 
 
 int isPalavraRes(char s[]){
-
+	//VERIFICA SE A STRING S É UMA PALAVRA RESERVADA
+	return buscaBinaria(s, palavrasRes[], 0, TAM);
 }
 
 
