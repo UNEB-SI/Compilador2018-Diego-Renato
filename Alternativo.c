@@ -4,6 +4,8 @@
 #include<ctype.h>
 
 #include "analex.h"
+#include "error.h"
+
 #define TAM 20
 
 char palavrasRes[][TAM] = {
@@ -93,14 +95,14 @@ Token verifyToken()
     FILE *codFonte;
     char c;
     char buffer[20];
-    int estado,coluna=0,linha=0;
+    int estado, coluna=0, linha=0;
     Token token;
     codFonte=fopen("teste.txt", "r");
     if(codFonte == NULL){
         printf("erro ao abrir o arquivo\n");
         return -1;
     }
-    i = 0;
+    int i = 0;
     estado = 0;
     while(1){
         switch(estado)
@@ -137,6 +139,7 @@ Token verifyToken()
                 }else if (c = '\''){
                     estado =39;
                 }else if (feof(codFonte)){
+                    error_message(FINAL_DO_ARQUIVO, -1);
                     break;
                 }
                 break;
@@ -154,7 +157,7 @@ Token verifyToken()
                 if(isPalavraRes(buffer){
                     //case seja palavra reservadoa identificar qual a palavra reservada
                 }else {
-                    strcpy(token.s,buffer);
+                    strcpy(token.s, buffer);
                     print("<ID, %s>\n", token.s);
                 }
                 return token;
@@ -201,12 +204,12 @@ Token verifyToken()
                 }
                 break;
             case 7:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 estado = 0;
                 break;
             case 8:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer(&i);
                 estado = 0;
@@ -223,13 +226,13 @@ Token verifyToken()
                 }
                 break;
             case 10:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 11:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
@@ -246,19 +249,19 @@ Token verifyToken()
                 }
                 break;
             case 13:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 14:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 15:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
@@ -304,7 +307,7 @@ Token verifyToken()
                 }else ERRO();
                 break;
             case 20:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
@@ -361,25 +364,25 @@ Token verifyToken()
                 }
                 break;
             case 27:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 28:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 29:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 30:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
@@ -409,7 +412,7 @@ Token verifyToken()
                 estado = 0;
                 break;
             case 36:
-                montaToken(buffer);
+                createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
