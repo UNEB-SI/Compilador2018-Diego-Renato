@@ -335,22 +335,6 @@ Token verifyToken()
                 createToken(LOG, buffer);
                 break;
             case 27:
-                //FINAL .not.
-                createToken(LOG, buffer);
-                break;
-            case 28:
-                  c = getCaracter(codFonte,coluna,linha);
-                if(c == '='){
-                    buffer[i] = c;
-                    i++;
-                    estado = 29;
-                }else {
-                    estado = 30;
-                    ungetc(codFonte);
-                }
-                break;
-<<<<<<< HEAD
-            case 27:
                 //FINAL  .NOT.
                 token = createToken(OP, buffer);
                 break;
