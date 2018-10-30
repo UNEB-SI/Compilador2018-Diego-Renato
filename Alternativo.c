@@ -49,7 +49,7 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     }
 }
 
-Token createToken(categoria type, void *buffer)
+Token  return createToken(categoria type, void *buffer)
 {
     Token returnToken;
     returnToken.cat = type;
@@ -154,12 +154,12 @@ Token verifyToken()
             case 2:
                 // FINAL
                 ungetc(c,codFonte);
-                tmp = isPalavraRes(buffer); 
+                int tmp = isPalavraRes(buffer); 
                 if(tmp){
                     //case seja palavra reservadoa identificar qual a palavra reservada
-                    createToken(tmp, buffer);
+                     return createToken(tmp, buffer);
                 }else {
-                    createToken(0, buffer);
+                     return createToken(0, buffer);
                 }
                 return token;
                 break;
@@ -189,8 +189,7 @@ Token verifyToken()
             case 5:
                    //FINAL
                 ungetc(c,codFonte);
-                createToken(3,buffer);
-                return token;   
+                return createToken(3,buffer);
                 break;
             case 6:
                 c = getCaracter(codFonte,coluna,linha);
@@ -205,11 +204,11 @@ Token verifyToken()
                 break;
             case 7:
                 //FINAL NUMERO REAL
-                createToken(CT_R,buffer);
+                 return createToken(CT_R,buffer);
                 break;
             case 8:
                 //FINAL MAIS
-                createToken(OP,buffer)
+                return createToken(OP,buffer);
                 break;
             case 9:
                 c = getCaracter(codFonte,coluna,linha);
@@ -217,14 +216,14 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 10;
-                }else {
+                } else {
                     ungetc(codFonte);
                     estado = 11;
                 }
                 break;
             case 10:
                 //FINAL MENOR IGUAL
-                createToken(OP,buffer);
+                 return createToken(OP,buffer);
                 break;
             case 11:
                 //FINAL MENOR 
@@ -243,15 +242,15 @@ Token verifyToken()
                 break;
             case 13:
                 //FINAL MAIOROUIGUAL
-                createToken(OP,buffer);
+                 return createToken(OP,buffer);
                 break;
             case 14:
                 //FINAL MAIOR
-                createToken(OP, buffer);
+                 return createToken(OP, buffer);
                 break;
             case 15:
                 //FINAL MENOS
-                createToken(OP,buffer);
+                 return createToken(OP,buffer);
                 break;
             case 16:
                 c = getCaracter(codFonte,coluna,linha);
@@ -267,7 +266,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 25;
-                }else ERRO();
+                }else error_message();
                 break;
             case 17:
                 c = getCaracter(codFonte,coluna,linha);
@@ -275,7 +274,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 18;
-                }else ERRO();
+                }else error_message();
                 break;
             case 18:
                 c = getCaracter(codFonte,coluna,linha);
@@ -283,7 +282,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 19;
-                }else ERRO();
+                }else error_message();
                 break;
             case 19:
                 c = getCaracter(codFonte,coluna,linha);
@@ -291,11 +290,11 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 20;
-                }else ERRO();
+                }else error_message();
                 break;
             case 20:
                 //FINAL .and.
-                createToken(LOG, buffer);
+                 return createToken(LOG, buffer);
                 break;
             case 21:
                 c = getCaracter(codFonte,coluna,linha);
@@ -303,7 +302,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 22;
-                }else ERRO();
+                }else error_message();
                 break;
             case 22:
                 break;
@@ -312,7 +311,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 24;
-                }else ERRO();
+                }else error_message();
                 break;
             case 24:
                 c = getCaracter(codFonte,coluna,linha);
@@ -320,7 +319,7 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 25;
-                }else ERRO();
+                }else error_message();
                 break;
             case 25:
                 c = getCaracter(codFonte,coluna,linha);
@@ -328,15 +327,15 @@ Token verifyToken()
                     buffer[i] = c;
                     i++;
                     estado = 20;
-                }else ERRO();
+                } else error_message();
                 break;
             case 26:
                 //FINAL .OR.
-                createToken(LOG, buffer);
+                 return createToken(LOG, buffer);
                 break;
             case 27:
                 //FINAL .not.
-                createToken(LOG, buffer);
+                 return createToken(LOG, buffer);
                 break;
             case 28:
                   c = getCaracter(codFonte,coluna,linha);
@@ -349,22 +348,21 @@ Token verifyToken()
                     ungetc(codFonte);
                 }
                 break;
-<<<<<<< HEAD
             case 27:
-                createToken(buffer);
+                 return createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 28:
-                createToken(buffer);
+                 return createToken(buffer);
                 printaToken();
                 resetBuffer();
                 estado = 0;
                 break;
             case 29:
             case 32:
-                createToken(CT_S, buffer);
+                 return createToken(CT_S, buffer);
                 break;
             case 33:
                 c = getCaracter(codFonte,coluna,linha);
@@ -381,13 +379,13 @@ Token verifyToken()
                 estado = 0;
                 break;
             case 36:
-                createToken(OP, buffer);
+                 return createToken(OP, buffer);
                 break;
             case 37:
-                createToken(OP, buffer);
+                 return createToken(OP, buffer);
                 break;
             case 38:
-                createToken(OP, buffer);
+                 return createToken(OP, buffer);
                 break;
             case 39:
                 c = getCaracter(codFonte,coluna,linha);
@@ -396,11 +394,10 @@ Token verifyToken()
                  c = getCaracter(codFonte,coluna,linha);
                 estado = 41;
             case 41:
-                createToken(CT_C, buffer);
-                
+                 return createToken(CT_CH, buffer);
+            default:
+                error_message(FINAL_DO_ARQUIVO, linha);
         }//fim switch
-
-
     } //fim while
 
     fclose(codFonte);

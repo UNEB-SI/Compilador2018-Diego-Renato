@@ -9,9 +9,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="79bdbcea-6398-4e97-87c0-7e483131fd02" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/Alternativo.c" beforeDir="false" afterPath="$PROJECT_DIR$/Alternativo.c" afterDir="false" />
-    </list>
+    <list default="true" id="79bdbcea-6398-4e97-87c0-7e483131fd02" name="Default" comment="" />
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -34,8 +32,8 @@
       <file leaf-file-name="Alternativo.c" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Alternativo.c">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="221">
-              <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
+            <state relative-caret-position="255">
+              <caret line="58" column="45" selection-start-line="58" selection-start-column="45" selection-end-line="58" selection-end-column="45" />
             </state>
           </provider>
         </entry>
@@ -185,8 +183,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/Alternativo.c">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="221">
-          <caret line="56" column="45" selection-start-line="56" selection-start-column="45" selection-end-line="56" selection-end-column="45" />
+        <state relative-caret-position="255">
+          <caret line="58" column="45" selection-start-line="58" selection-start-column="45" selection-end-line="58" selection-end-column="45" />
         </state>
       </provider>
     </entry>
