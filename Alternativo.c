@@ -38,7 +38,7 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     }
     if(cmp < 0){
         // palavra menor que a metade
-        if(ini > fim) 
+        if(ini >= fim) 
             return -1;
         return buscaBinaria(palavra, palavrasRes,ini , (ini+fim)/2 -1);
     }
