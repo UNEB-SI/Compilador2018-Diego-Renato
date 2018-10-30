@@ -306,8 +306,15 @@ Token verifyToken(FILE *codFonte)
                 }else error_message();
                 break;
             case 22:
+                c = getCaracter(codFonte,coluna,linha);
+                if(c == '.'){
+                    buffer[i] = c;
+                    i++;
+                    estado = 26;
+                }
                 break;
             case 23:
+                c = getCaracter(codFonte,coluna,linha);
                 if(c == 'o'){
                     buffer[i] = c;
                     i++;
