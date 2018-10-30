@@ -86,11 +86,8 @@ Token createToken(categoria type, void *buffer)
     return returnToken;
 }
 
-void resetBuffer(int *i) {
-    *i = 0;
-}
 
-Token verifyToken()
+Token verifyToken(FILE *codFonte)
 {
     FILE *codFonte;
     char c;
@@ -152,9 +149,9 @@ Token verifyToken()
                 buffer[i] = c;
                 break;
             case 2:
-                // FINAL
+                // FINAL Lexema
                 ungetc(c,codFonte);
-                int tmp = isPalavraRes(buffer); 
+                tmp = isPalavraRes(buffer); 
                 if(tmp){
                     //case seja palavra reservadoa identificar qual a palavra reservada
                      return createToken(tmp, buffer);
