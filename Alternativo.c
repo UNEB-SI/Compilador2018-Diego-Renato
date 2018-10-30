@@ -19,7 +19,7 @@ int isPalavraRes(char s[]){
     return buscaBinaria(s, palavrasRes[], 0, TAM);
 }
 
-char getCaracter(FILE *p, int *coluna,int *linha){
+char getCaracter(FILE *p, int *col,int *linha){
     char c;
     c = fgetc(p);
     if(c == '\n'){
@@ -49,7 +49,7 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     }
 }
 
-Token  return createToken(categoria type, void *buffer)
+Token createToken(categoria type, void *buffer)
 {
     Token returnToken;
     returnToken.cat = type;
@@ -349,20 +349,34 @@ Token verifyToken()
                 }
                 break;
             case 27:
-                 return createToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                //FINAL  .NOT.
+                token = createToken(OP, buffer);
                 break;
             case 28:
-                 return createToken(buffer);
-                printaToken();
-                resetBuffer();
-                estado = 0;
+                c = getCaracter(codFonte,coluna,linha);
+                if(c == '='){
+                    i++;
+                    buffer[i] = c;
+                    estado = 29;
+                }else estado = 30
                 break;
             case 29:
+                //FINAL ==
+                token = createToken(OP, buffer);
+                break;
+            case 30:
+                //FINAL DIVISAO
+                ungetc(c,codFonte);
+                token = createToken(OP,buffer);
+                break;
+            case 31:
+                c = getCaracter(codFonte,coluna,linha);
+                if(c == '"')
+                    estado = 32;
+                i++;
+                buffer[i] = c;
             case 32:
-                 return createToken(CT_S, buffer);
+                token = createToken(CT_S, buffer);
                 break;
             case 33:
                 c = getCaracter(codFonte,coluna,linha);
@@ -382,25 +396,23 @@ Token verifyToken()
                  return createToken(OP, buffer);
                 break;
             case 37:
-                 return createToken(OP, buffer);
                 break;
             case 38:
-                 return createToken(OP, buffer);
+                token = createToken(OP, buffer);
                 break;
             case 39:
                 c = getCaracter(codFonte,coluna,linha);
-                estado = 40;
             case 40:
                  c = getCaracter(codFonte,coluna,linha);
                 estado = 41;
             case 41:
-                 return createToken(CT_CH, buffer);
+                token = createToken(CT_C, buffer);
             default:
                 error_message(FINAL_DO_ARQUIVO, linha);
         }//fim switch
     } //fim while
 
     fclose(codFonte);
-    return 0;
+    return token;
 }
 
