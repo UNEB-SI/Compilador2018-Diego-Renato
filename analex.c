@@ -1,8 +1,3 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-#include<ctype.h>
-
 #include "analex.h"
 #include "error.h"
 
@@ -15,11 +10,10 @@ char palavrasRes[][TAM] = {
 };
 
 int isPalavraRes(char s[]){
-    //VERIFICA SE A STRING S É UMA PALAVRA RESERVADA
-    return buscaBinaria(s, palavrasRes[], 0, TAM);
+    return buscaBinaria(s, palavrasRes, 0, TAM);
 }
 
-char getCaracter(FILE *p, int *col,int *linha){
+char getCaracter(FILE *p, int col, int linha){
     char c;
     c = fgetc(p);
     if(c == '\n'){
@@ -29,14 +23,13 @@ char getCaracter(FILE *p, int *col,int *linha){
     return c;
 }
 
+
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     int cmp;
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
-    if(cmp == 0){
-        //ACHOU
-        return (ini + fim)/2;
-    }
-    if(cmp < 0){
+    if(cmp == 0) //ACHOU
+        return (ini + fim)/2;    
+    if(cmp < 0) {
         // palavra menor que a metade
         if(ini >= fim) 
             return -1;
@@ -54,63 +47,52 @@ Token createToken(categoria type, void *buffer)
 {
     Token returnToken;
     returnToken.cat = type;
-    if (type == ID)
-    {
-       // strcpy(returnToken.cat, ID);
+    if (type == ID) {
         strcpy(returnToken.s, (char *) buffer);
-    }
-    else if (type == PR)
-    {
-        //strcpy(returnToken.cat, PR);
+        printf("1\n");
+    } else if (type == PR) {
         strcpy(returnToken.s, (char *) buffer);
-    }
-    else if (type == CT_I)
-    {
-        //strcpy(returnToken.cat, CT_I);
-        //strcpy(returnToken.n, (int *) buffer);
+        printf("2\n");
+    } else if (type == CT_I) {
         returnToken.n = atoi(buffer);
-    }
-    else if (type == CT_R)
-    {
-        //strcpy(returnToken.cat, CT_R);
-        //strcpy(returnToken.r, (float *) buffer);
-        return.r = atof(buffer);
-    }
-    else if (type == LOG)
-    {
-        //strcpy(returnToken.cat, LOG);
-        //strcpy(returnToken.n, (int *) buffer);
+        printf("3\n");
+    } else if (type == CT_R) {
+        returnToken.r = atof(buffer);
+        printf("4\n");
+    } else if (type == LOG) {
         returnToken.n = atoi(buffer);
-    }
-    else if (type == OP)
-    {
-        strcpy(returnToken.cat, OP);
+        printf("5\n");
+    } else if (type == OP) {
         strcpy(returnToken.s, (char *) buffer);
+        printf("6\n");
     }
+    printf("%i\n", type);
     return returnToken;
 }
 
-
-Token verifyToken(FILE *codFonte)
-{
+Token verifyToken() {
     FILE *codFonte;
     char c;
     char buffer[20];
     int estado, coluna=0, linha=0;
     Token token;
-    codFonte=fopen("teste.txt", "r");
-    if(codFonte == NULL){
+    printf("================ Abrindo arquivo ==============\n");
+
+    codFonte = fopen("teste.txt", "r");
+    
+    if (codFonte == NULL) {
         printf("erro ao abrir o arquivo\n");
-        return -1;
+        exit(-1);
     }
     int i = 0;
     estado = 0;
-    while(1){
+    while(1) {
         switch(estado)
         {
             case 0:
                 c = getCaracter(codFonte,coluna,linha);
                 buffer[i] = c;
+                printf("Char: %c\n", c);
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -155,7 +137,7 @@ Token verifyToken(FILE *codFonte)
             case 2:
                 // FINAL Lexema
                 ungetc(c,codFonte);
-                tmp = isPalavraRes(buffer); 
+                int tmp = isPalavraRes(buffer); 
                 if(tmp){
                     //case seja palavra reservadoa identificar qual a palavra reservada
                      return createToken(tmp, buffer);
@@ -218,7 +200,7 @@ Token verifyToken(FILE *codFonte)
                     i++;
                     estado = 10;
                 } else {
-                    ungetc(codFonte);
+                    ungetc(c, codFonte);
                     estado = 11;
                 }
                 break;
@@ -267,7 +249,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 25;
-                }else error_message();
+                } 
+//				else error_message();
                 break;
             case 17:
                 c = getCaracter(codFonte,coluna,linha);
@@ -275,7 +258,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 18;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 18:
                 c = getCaracter(codFonte,coluna,linha);
@@ -283,7 +267,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 19;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 19:
                 c = getCaracter(codFonte,coluna,linha);
@@ -291,7 +276,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 20;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 20:
                 //FINAL .and.
@@ -303,7 +289,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 22;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 22:
                 c = getCaracter(codFonte,coluna,linha);
@@ -319,7 +306,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 24;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 24:
                 c = getCaracter(codFonte,coluna,linha);
@@ -327,7 +315,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 25;
-                }else error_message();
+                }
+//				else error_message();
                 break;
             case 25:
                 c = getCaracter(codFonte,coluna,linha);
@@ -335,7 +324,8 @@ Token verifyToken(FILE *codFonte)
                     buffer[i] = c;
                     i++;
                     estado = 20;
-                } else error_message();
+                }
+//				else error_message();
                 break;
             case 26:
                 //FINAL .OR.
@@ -399,7 +389,7 @@ Token verifyToken(FILE *codFonte)
                  c = getCaracter(codFonte,coluna,linha);
                 estado = 41;
             case 41:
-                token = createToken(CT_C, buffer);
+                token = createToken(CT_CH, buffer);
             default:
                 error_message(FINAL_DO_ARQUIVO, linha);
         }//fim switch
@@ -408,4 +398,5 @@ Token verifyToken(FILE *codFonte)
     fclose(codFonte);
     return token;
 }
+
 

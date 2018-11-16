@@ -54,10 +54,11 @@ void error_message(int flag, int line_number)
         printf("Arquivo nao encontrado!");
         break;
     case ERRO_NUMERO_FLOAT_FORMAT:
-        printf("Esperado um nÃºmero apÃ³s ");
+        printf("Esperado um número após ");
         break;
     case FINAL_DO_ARQUIVO:
         printf("Final do arquivo (%d\n)", line_number);
         break;
-        exit(-1);
+	}
+    exit(-1);
 }

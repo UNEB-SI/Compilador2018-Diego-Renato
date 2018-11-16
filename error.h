@@ -1,11 +1,6 @@
 #ifndef ERROR_H
 #define ERRO_H
 
-/*
-  * Created by: Fernando Maia
-  * Last Modification: 13/12/2017
-*/
-
 enum code_error
 {
   ESPERANDO_ID = 1,
