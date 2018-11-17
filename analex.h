@@ -25,8 +25,9 @@ typedef struct {
 
 Token createToken(categoria type, void *buffer);
 int isPalavraRes(char s[]);
-int buscaBinaria(char *palavra, char palavrasRes[][TAM] , int ini, int fim);
+int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim);
 char getCaracter(FILE *p, int col, int linha);
 Token verifyToken();
+void concat(char *string, char c);
 
 #endif

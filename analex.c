@@ -9,37 +9,46 @@ char palavrasRes[][TAM] = {
     "noparam", "pl", "proc", "prog", "real", "return", "var", "while"
 };
 
-int isPalavraRes(char s[]){
-    return buscaBinaria(s, palavrasRes, 0, TAM);
+int isPalavraRes(char *s){
+    return buscaBinaria(s, palavrasRes, 0, TAM-1);
 }
 
 char getCaracter(FILE *p, int col, int linha){
     char c;
     c = fgetc(p);
+    printf("Char: [%c]\n", c);
     if(c == '\n'){
         linha++;
         col = 0;
-    }else col++;
+    } else col++;
+//    if(c == EOF) exit(0);
     return c;
 }
 
+void concat(char *string, char c) {
+    int size = strlen(string);
+    string[size] = c;
+    string[size + 1] = '\0';
+}
 
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     int cmp;
+    printf("Resultado: [%s==%s]\n", palavra, palavrasRes[(ini+fim)/2]);
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
+    printf("Resultado: %i %i %i\n", ini, fim, cmp);
     if(cmp == 0) //ACHOU
         return (ini + fim)/2;    
     if(cmp < 0) {
         // palavra menor que a metade
         if(ini >= fim) 
             return -1;
-        return buscaBinaria(palavra, palavrasRes,ini , (ini+fim)/2 -1);
+        return buscaBinaria(palavra, palavrasRes,ini , ((ini+fim)/2) -1);
     }
     if (cmp > 0){
         //palavra maior que a metade
         if(ini >= fim)
             return -1;
-        return buscaBinaria(palavra,palavrasRes,(ini + fim)/2 +1,fim);
+        return buscaBinaria(palavra,palavrasRes,((ini + fim)/2) +1, fim);
     }
 }
 
@@ -49,24 +58,17 @@ Token createToken(categoria type, void *buffer)
     returnToken.cat = type;
     if (type == ID) {
         strcpy(returnToken.s, (char *) buffer);
-        printf("1\n");
     } else if (type == PR) {
         strcpy(returnToken.s, (char *) buffer);
-        printf("2\n");
     } else if (type == CT_I) {
         returnToken.n = atoi(buffer);
-        printf("3\n");
     } else if (type == CT_R) {
         returnToken.r = atof(buffer);
-        printf("4\n");
     } else if (type == LOG) {
         returnToken.n = atoi(buffer);
-        printf("5\n");
     } else if (type == OP) {
         strcpy(returnToken.s, (char *) buffer);
-        printf("6\n");
     }
-    printf("%i\n", type);
     return returnToken;
 }
 
@@ -74,8 +76,10 @@ Token verifyToken() {
     FILE *codFonte;
     char c;
     char buffer[20];
+    memset(buffer, 0, 20);
     int estado, coluna=0, linha=0;
     Token token;
+    
     printf("================ Abrindo arquivo ==============\n");
 
     codFonte = fopen("teste.txt", "r");
@@ -91,8 +95,7 @@ Token verifyToken() {
         {
             case 0:
                 c = getCaracter(codFonte,coluna,linha);
-                buffer[i] = c;
-                printf("Char: %c\n", c);
+                concat(buffer, c);                
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -119,7 +122,7 @@ Token verifyToken() {
                     estado = 37;
                 }else if (c == ' '){
                     estado = 0;
-                }else if (c = '\''){
+                }else if (c == '\''){
                     estado =39;
                 }else if (feof(codFonte)){
                     error_message(FINAL_DO_ARQUIVO, -1);
@@ -127,19 +130,19 @@ Token verifyToken() {
                 }
                 break;
             case 1:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if(!(isalnum(c))){
                     estado = 2;
                 }
                 i++;
-                buffer[i] = c;
+                concat(buffer, c);
                 break;
             case 2:
                 // FINAL Lexema
-                ungetc(c,codFonte);
-                int tmp = isPalavraRes(buffer); 
+                ungetc(c, codFonte);
+                int tmp = isPalavraRes(buffer);
                 if(tmp){
-                    //case seja palavra reservadoa identificar qual a palavra reservada
+                    // case seja palavra reservadoa identificar qual a palavra reservada
                      return createToken(tmp, buffer);
                 }else {
                      return createToken(0, buffer);
@@ -147,41 +150,41 @@ Token verifyToken() {
                 return token;
                 break;
             case 3:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if(isdigit(c)){
                     i++;
-                    buffer[i] = c;
+                    concat(buffer, c);
                 }else if (c ==  '.'){
                     i++;
-                    buffer[i] = c;
+                    concat(buffer, c);
                     estado = 4;
                 }else 
                     estado = 5;
                 break;
             case 4:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if(isdigit(c)){
                     i++;
-                    buffer[i] = c;
+                    concat(buffer, c);
                 }else {
                     //volta um caracter do arquivo e vai para o estado 5
-                    ungetc(c,codFonte);
+                    ungetc(c, codFonte);
                     estado = 5;
                 }
                 break;
             case 5:
-                   //FINAL
-                ungetc(c,codFonte);
+                //FINAL
+                ungetc(c, codFonte);
                 return createToken(3,buffer);
                 break;
             case 6:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if( isdigit(c) ){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                 }else {
                     estado = 7;
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                 }
                 break;
@@ -196,7 +199,7 @@ Token verifyToken() {
             case 9:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '='){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 10;
                 } else {
@@ -215,7 +218,7 @@ Token verifyToken() {
             case 12:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '='){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 13;
                 }else {
@@ -238,15 +241,15 @@ Token verifyToken() {
             case 16:
                 c = getCaracter(codFonte,coluna,linha);
                 if( c == 'a'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 17;
                 }else if (c == 'o'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 21;
                 }else if (c == 'n'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 25;
                 } 
@@ -255,7 +258,7 @@ Token verifyToken() {
             case 17:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == 'n'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 18;
                 }
@@ -264,7 +267,7 @@ Token verifyToken() {
             case 18:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == 'd'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 19;
                 }
@@ -273,7 +276,7 @@ Token verifyToken() {
             case 19:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '.'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 20;
                 }
@@ -286,7 +289,7 @@ Token verifyToken() {
             case 21:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == 'r'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 22;
                 }
@@ -295,7 +298,7 @@ Token verifyToken() {
             case 22:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '.'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 26;
                 }
@@ -303,7 +306,7 @@ Token verifyToken() {
             case 23:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == 'o'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 24;
                 }
@@ -312,7 +315,7 @@ Token verifyToken() {
             case 24:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == 't'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 25;
                 }
@@ -321,7 +324,7 @@ Token verifyToken() {
             case 25:
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '.'){
-                    buffer[i] = c;
+                    concat(buffer, c);
                     i++;
                     estado = 20;
                 }
@@ -339,7 +342,7 @@ Token verifyToken() {
                 c = getCaracter(codFonte,coluna,linha);
                 if(c == '='){
                     i++;
-                    buffer[i] = c;
+                    concat(buffer, c);
                     estado = 29;
                 }else estado = 30;
                 break;
@@ -357,7 +360,7 @@ Token verifyToken() {
                 if(c == '"')
                     estado = 32;
                 i++;
-                buffer[i] = c;
+                concat(buffer, c);
             case 32:
                 token = createToken(CT_S, buffer);
                 break;
