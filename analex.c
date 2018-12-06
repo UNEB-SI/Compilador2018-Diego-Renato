@@ -14,14 +14,15 @@ int isPalavraRes(char *s){
 }
 
 char getCaracter(FILE *p, int col, int linha){
-    char c;
-    c = fgetc(p);
-    printf("Char: [%c]\n", c);
-    if(c == '\n'){
+    char c = fgetc(p);
+        if (c == '\n') {
         linha++;
         col = 0;
     } else col++;
-//    if(c == EOF) exit(0);
+    if (c == EOF) {
+    	error_message(16, linha);
+		exit(0);
+	}
     return c;
 }
 
@@ -33,9 +34,7 @@ void concat(char *string, char c) {
 
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     int cmp;
-    printf("Resultado: [%s==%s]\n", palavra, palavrasRes[(ini+fim)/2]);
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
-    printf("Resultado: %i %i %i\n", ini, fim, cmp);
     if(cmp == 0) //ACHOU
         return (ini + fim)/2;    
     if(cmp < 0) {
@@ -50,6 +49,15 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
             return -1;
         return buscaBinaria(palavra,palavrasRes,((ini + fim)/2) +1, fim);
     }
+}
+
+char desconcat(char *string){
+    int size = strlen(string);
+    char c = string[size - 1];
+    if(size > 0) {
+    	string[size - 1] = '\0';
+	}
+    return c;
 }
 
 Token createToken(categoria type, void *buffer)
@@ -76,7 +84,7 @@ Token verifyToken() {
     FILE *codFonte;
     char c;
     char buffer[20];
-    memset(buffer, 0, 20);
+    memset(buffer, 0, 19);
     int estado, coluna=0, linha=0;
     Token token;
     
@@ -139,7 +147,7 @@ Token verifyToken() {
                 break;
             case 2:
                 // FINAL Lexema
-                ungetc(c, codFonte);
+                desconcat(buffer);
                 int tmp = isPalavraRes(buffer);
                 if(tmp){
                     // case seja palavra reservadoa identificar qual a palavra reservada
@@ -168,14 +176,14 @@ Token verifyToken() {
                     concat(buffer, c);
                 }else {
                     //volta um caracter do arquivo e vai para o estado 5
-                    ungetc(c, codFonte);
+                    desconcat(buffer);
                     estado = 5;
                 }
                 break;
             case 5:
                 //FINAL
-                ungetc(c, codFonte);
-                return createToken(3,buffer);
+                desconcat(buffer);
+                return createToken(3, buffer);
                 break;
             case 6:
                 c = getCaracter(codFonte, coluna, linha);
@@ -190,20 +198,20 @@ Token verifyToken() {
                 break;
             case 7:
                 //FINAL NUMERO REAL
-                 return createToken(CT_R,buffer);
+                 return createToken(CT_R, buffer);
                 break;
             case 8:
                 //FINAL MAIS
-                return createToken(OP,buffer);
+                return createToken(OP, buffer);
                 break;
             case 9:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if(c == '='){
                     concat(buffer, c);
                     i++;
                     estado = 10;
                 } else {
-                    ungetc(c, codFonte);
+                    desconcat(buffer);
                     estado = 11;
                 }
                 break;
@@ -213,16 +221,16 @@ Token verifyToken() {
                 break;
             case 11:
                 //FINAL MENOR 
-                ungetc(c,codFonte);
+                desconcat(buffer);
                 break;
             case 12:
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
                 if(c == '='){
                     concat(buffer, c);
                     i++;
                     estado = 13;
                 }else {
-                    ungetc(c, codFonte);
+                    desconcat(buffer);
                     estado = 14;
                 }
                 break;
@@ -352,7 +360,7 @@ Token verifyToken() {
                 break;
             case 30:
                 //FINAL DIVISAO
-                ungetc(c,codFonte);
+                desconcat(buffer);
                 token = createToken(OP,buffer);
                 break;
             case 31:

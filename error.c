@@ -57,7 +57,7 @@ void error_message(int flag, int line_number)
         printf("Esperado um número após ");
         break;
     case FINAL_DO_ARQUIVO:
-        printf("Final do arquivo (%d\n)", line_number);
+        printf("Final do arquivo (%d)\n", line_number);
         break;
 	}
     exit(-1);

@@ -7,6 +7,6 @@
 int main(int argc, char *argv[]) {
 	Token newToken;
 	newToken = verifyToken();
-	printf("Resultado do Token: %i\n", newToken.s);
+	printf("Resultado do Token: %d\n", newToken.cat);
 	return 0;
 }
