@@ -138,20 +138,15 @@ Token verifyToken() {
                     estado = 39;
                 } else if(c == '('){
                     estado = 42;
-                }
-				else if(c == ')'){
+                }else if(c == ')'){
                     estado = 43;
-                }
-                else if(c == '['){
+                }else if(c == '['){
                     estado = 44;
-                }
-                else if(c == ']'){
+                }else if(c == ']'){
                     estado = 45;
-                }
-                else if(c == ','){
+                }else if(c == ','){
                     estado = 46;
-                }
-                else if(c == ';'){
+                }else if(c == ';'){
                     estado = 47;
                 } 
 				else if(c == '\n'){
@@ -464,13 +459,40 @@ Token verifyToken() {
             case 39:
             	printf("Coluna: [39]\n", i);
                 c = getCaracter(codFonte,coluna,linha);
+		break;
             case 40:
             	printf("Coluna: [40]\n", i);
                  c = getCaracter(codFonte,coluna,linha);
                 estado = 41;
+		break;
             case 41:
             	printf("Coluna: [41]\n", i);
                 token = createToken(CT_CH, buffer);
+		break;
+	     case 42:
+            	printf("Coluna: [42]\n", i);
+                token = createToken(ABREPARENTESES, buffer);
+		break;
+	     case 43:
+            	printf("Coluna: [43]\n", i);
+                token = createToken(FECHAPARENTESES, buffer);
+		break;	
+	     case 44:
+            	printf("Coluna: [44]\n", i);
+                token = createToken(ABRECOLCHETE, buffer);
+		break;
+	     case 45:
+            	printf("Coluna: [45]\n", i);
+                token = createToken(FECHACOLCHETE, buffer);
+		break;
+	      case 46:
+            	printf("Coluna: [46]\n", i);
+                token = createToken(VIRGULA, buffer);
+		break;
+	      case 47:
+            	printf("Coluna: [47]\n", i);
+                token = createToken(PONTO_VIRGULA, buffer);
+		break;
             default:
             	printf("Coluna: [42]\n", i);
                 error_message(FINAL_DO_ARQUIVO, linha);
