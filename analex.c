@@ -9,8 +9,6 @@ char palavrasRes[][TAM] = {
     "noparam", "pl", "proc", "prog", "real", "return", "var", "while"
 };
 
-
-
 int isPalavraRes(char *s){
     return buscaBinaria(s, palavrasRes, 0, TAM-1);
 }
@@ -22,10 +20,6 @@ char getCaracter(FILE *p, int col, int linha){
         linha++;
         col = 0;
     } else col++;
-    if (c == EOF) {
-    	error_message(FINAL_DO_ARQUIVO, linha);
-		exit(0);
-	}
     return c;
 }
 
@@ -38,6 +32,7 @@ void concat(char *string, char c) {
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     int cmp;
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
+    printf("Search Binary: [%d] [%s]\n", cmp, palavra);
     if(cmp == 0) //ACHOU
         return (ini + fim)/2;    
     if(cmp < 0) {
@@ -83,29 +78,32 @@ Token createToken(categoria type, void *buffer)
     return returnToken;
 }
 
-Token verifyToken() {
-    FILE *codFonte;
-    char c;
-    char buffer[200];
-    memset(buffer, 0, 199);
-    int estado, coluna=0, linha=0;
-    Token token;
-    
-    printf("================ Abrindo arquivo ==============\n");
+void clearBuffer(char *buffer) {
+	memset(buffer, 0, 199);
+}
 
+FILE* openFile() {
+	FILE *codFonte;
+	printf("================ Abrindo arquivo ==============\n");
     codFonte = fopen("teste.txt", "r");
-    
     if (codFonte == NULL) {
         printf("erro ao abrir o arquivo\n");
         exit(-1);
     }
-    int i = 0;
-    estado = 0;
+    return codFonte;
+}
+
+Token verifyToken(FILE *codFonte) {
+    char buffer[200], c;
+    int estado = 0, coluna = 0, linha = 0, i = 0;
+    memset(buffer, 0, 199);
+    Token token;
+
     while(1) {
         switch(estado)
         {
             case 0:
-//            	printf("Coluna: [0]\n", i);
+//            	printf("\nBuffer: [%s]\n", buffer);
                 c = getCaracter(codFonte, coluna, linha);
                 concat(buffer, c);                
                 if(isalpha(c)){
@@ -134,6 +132,7 @@ Token verifyToken() {
                     estado = 37;
                 }else if (c == ' '){
                     estado = 0;
+                    clearBuffer(buffer);
                 }else if (c == '\''){
                     estado = 39;
                 } else if(c == '('){
@@ -161,34 +160,32 @@ Token verifyToken() {
                 break;
             case 1:
 //            	printf("Coluna: [1]\n", i);
-                c = getCaracter(codFonte, coluna, linha);
-                if(!isalnum(c) && ' ' != c){
-                    estado = 2;
-                }
+            	c = getCaracter(codFonte, coluna, linha);
+            	if(!(isalpha(c) || isdigit(c))) estado = 2;
                 i++;
                 concat(buffer, c);
                 break;
             case 2:
 //            	printf("Coluna: [2]\n", i);
                 // FINAL Lexema
-                desconcat(buffer);
+                ungetc(desconcat(buffer), codFonte);
                 int tmp = isPalavraRes(buffer);
-                if(tmp){
-//                	printf("Coluna: [2-1][%c]\n", c);
-                    // case seja palavra reservadoa identificar qual a palavra reservada
-                     return createToken(tmp, buffer);
-                }else {
-//                	printf("Coluna: [2-2]\n", i);
-                     return createToken(0, buffer);
+                if(tmp == -1){
+                	printf("Coluna: [2-1][%c]\n", c);
+                	return createToken(ID, buffer);
+
+                } else {
+                	printf("Coluna: [2-2]\n", i);
+                    return createToken(PR, buffer);
                 }
                 return token;
                 break;
             case 3:
-            	printf("Coluna: [3]\n", i);
+//            	printf("Coluna: [3]\n", i);
                 c = getCaracter(codFonte, coluna, linha);
                 if(isdigit(c)){
-                    i++;
-                    concat(buffer, c);
+                	concat(buffer, c);
+                    i++;                    
                 }else if (c ==  '.'){
                     i++;
                     concat(buffer, c);
@@ -395,7 +392,7 @@ Token verifyToken() {
             case 27:
             	printf("Coluna: [27]\n", i);
                 //FINAL  .NOT.
-                token = createToken(OP, buffer);
+                return createToken(OP, buffer);
                 break;
             case 28:
             	printf("Coluna: [28]\n", i);
@@ -409,13 +406,13 @@ Token verifyToken() {
             case 29:
             	printf("Coluna: [29]\n", i);
                 //FINAL ==
-                token = createToken(OP, buffer);
+                return createToken(OP, buffer);
                 break;
             case 30:
             	printf("Coluna: [30]\n", i);
                 //FINAL DIVISAO
                 desconcat(buffer);
-                token = createToken(OP,buffer);
+                return createToken(OP,buffer);
                 break;
             case 31:
             	printf("Coluna: [31]\n", i);
@@ -426,7 +423,7 @@ Token verifyToken() {
                 concat(buffer, c);
             case 32:
             	printf("Coluna: [32]\n", i);
-                token = createToken(CT_S, buffer);
+                return createToken(CT_S, buffer);
                 break;
             case 33:
             	printf("Coluna: [33]\n", i);
@@ -447,60 +444,61 @@ Token verifyToken() {
                 break;
             case 36:
             	printf("Coluna: [36]\n", i);
-                 return createToken(OP, buffer);
+                return createToken(OP, buffer);
                 break;
             case 37:
             	printf("Coluna: [37]\n", i);
                 break;
             case 38:
             	printf("Coluna: [38]\n", i);
-                token = createToken(OP, buffer);
+                return createToken(OP, buffer);
                 break;
             case 39:
             	printf("Coluna: [39]\n", i);
                 c = getCaracter(codFonte,coluna,linha);
-		break;
+				break;
             case 40:
             	printf("Coluna: [40]\n", i);
-                 c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte,coluna,linha);
                 estado = 41;
-		break;
+				break;
             case 41:
             	printf("Coluna: [41]\n", i);
-                token = createToken(CT_CH, buffer);
-		break;
+                return createToken(CT_CH, buffer);
+				break;
 	     case 42:
             	printf("Coluna: [42]\n", i);
-                token = createToken(ABREPARENTESES, buffer);
-		break;
+                return createToken(ABREPARENTESE, buffer);
+				break;
 	     case 43:
             	printf("Coluna: [43]\n", i);
-                token = createToken(FECHAPARENTESES, buffer);
-		break;	
+                return createToken(FECHAPARENTESE, buffer);
+                system("pause");
+				break;	
 	     case 44:
             	printf("Coluna: [44]\n", i);
-                token = createToken(ABRECOLCHETE, buffer);
-		break;
+                return createToken(ABRECOLCHETE, buffer);
+				break;
 	     case 45:
             	printf("Coluna: [45]\n", i);
-                token = createToken(FECHACOLCHETE, buffer);
-		break;
+                return createToken(FECHACOLCHETE, buffer);
+				break;
 	      case 46:
             	printf("Coluna: [46]\n", i);
-                token = createToken(VIRGULA, buffer);
-		break;
+                return createToken(VIRGULA, buffer);
+				break;
 	      case 47:
             	printf("Coluna: [47]\n", i);
-                token = createToken(PONTO_VIRGULA, buffer);
-		break;
+                return createToken(PONTO_VIRGULA, buffer);
+				break;
             default:
             	printf("Coluna: [42]\n", i);
                 error_message(FINAL_DO_ARQUIVO, linha);
         }//fim switch
     } //fim while
 
-    fclose(codFonte);
-    return token;
+//    fclose(codFonte);
+//    return token;
 }
 
 

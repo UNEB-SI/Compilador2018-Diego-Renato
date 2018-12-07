@@ -16,7 +16,7 @@ typedef enum{ MAIS, MENOS, MAIOR, MENOR, MENOROUIGUAL, MAIOROUIGUAL, ABREPARENTE
 
 // PALAVRAS RESERVADAS
 typedef  enum { BOOL, CALL, CHAR, DISPLAY,ELSE, ENDFOR, ENDIF, ENDPROC, ENDPROG, ENDVAR, ENDWHILE, FOR,
-    FWD, IF, INT,KEYBOARD, NOPARAM, PL, PROC,PROG, REAL, RETURN, VAR, WHILE } palavra;
+    FWD, IF, INT, KEYBOARD, NOPARAM, PL, PROC,PROG, REAL, RETURN, VAR, WHILE } palavra;
 
 // ESTRUTURA DO TOKEN
 typedef struct {
@@ -24,11 +24,12 @@ typedef struct {
     union{ int n; float r; char s[10]; };
 } Token;
 
+FILE* openFile();
 Token createToken(categoria type, void *buffer);
 int isPalavraRes(char s[]);
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim);
 char getCaracter(FILE *p, int col, int linha);
-Token verifyToken();
+Token verifyToken(FILE *codFonte);
 void concat(char *string, char c);
 
 #endif
