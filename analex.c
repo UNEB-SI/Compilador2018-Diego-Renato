@@ -455,39 +455,46 @@ Token verifyToken(FILE *codFonte) {
                 break;
             case 39:
             	printf("Coluna: [39]\n", i);
-                c = getCaracter(codFonte,coluna,linha);
+                c = getCaracter(codFonte, coluna, linha);
+                concat(buffer, c);
+				estado = 40;
 				break;
             case 40:
             	printf("Coluna: [40]\n", i);
-                c = getCaracter(codFonte,coluna,linha);
-                estado = 41;
+                c = getCaracter(codFonte, coluna, linha);
+                if(c == '\''){
+	                concat(buffer, c);
+	                estado = 41;
+				}else {
+					//mensagem de erro
+				}
 				break;
             case 41:
             	printf("Coluna: [41]\n", i);
                 return createToken(CT_CH, buffer);
 				break;
-	     case 42:
+	     	case 42:
             	printf("Coluna: [42]\n", i);
                 return createToken(ABREPARENTESE, buffer);
 				break;
-	     case 43:
-            	printf("Coluna: [43]\n", i);
+	    	case 43:
+         	   	printf("Coluna: [43]\n", i);
                 return createToken(FECHAPARENTESE, buffer);
                 system("pause");
 				break;	
-	     case 44:
+	   		case 44:
             	printf("Coluna: [44]\n", i);
                 return createToken(ABRECOLCHETE, buffer);
 				break;
-	     case 45:
+	   		case 45:
             	printf("Coluna: [45]\n", i);
                 return createToken(FECHACOLCHETE, buffer);
 				break;
-	      case 46:
+	      	case 46:
             	printf("Coluna: [46]\n", i);
                 return createToken(VIRGULA, buffer);
 				break;
-	      case 47:
+	      	case 47:
             	printf("Coluna: [47]\n", i);
                 return createToken(PONTO_VIRGULA, buffer);
 				break;
