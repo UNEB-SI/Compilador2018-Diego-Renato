@@ -26,4 +26,41 @@ simbolo findSymbol(){
 
 }
 
+void var(){
+}
 
+bool declaration(){
+}
+
+bool param(){
+}
+
+bool function(){
+}
+
+bool procedure(){
+}
+
+bool factor(){
+}
+
+bool term(){
+}
+
+bool simple_expr(){
+}
+
+bool op_rel(){
+}
+
+bool expr(){
+}
+
+bool attribution(){
+}
+
+bool cmd(){
+}
+
+void prog(){
+}
