@@ -1,0 +1,6 @@
+Compile.exe
+anasint.o
+analex.o
+error.o
+main.o
+Makefile.win
