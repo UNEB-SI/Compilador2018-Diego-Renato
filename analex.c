@@ -410,7 +410,7 @@ Token verifyToken(FILE *codFonte) {
 	                concat(buffer, c);
 	                estado = 41;
 				}else {
-					//mensagem de erro
+					error_message(ESPERANDO_FECHA_APOSTROFO, linha, coluna);
 				}
 				break;
             case 41:
