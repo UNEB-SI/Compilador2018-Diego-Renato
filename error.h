@@ -24,5 +24,5 @@ enum code_error
   ERROR_SINTATICO
 };
 
-void error_message(int flag, int line_number);
+void error_message(int flag, int line_number, int coluna_number);
 #endif // ERRO
