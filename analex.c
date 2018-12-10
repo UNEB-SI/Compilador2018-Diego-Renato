@@ -2,7 +2,7 @@
 #include "error.h"
 #define TAM 20
 
-int coluna = 0, linha = 0;
+int coluna = -1, linha = 0;
 FILE *codFonte;
 Token token;
 
@@ -42,7 +42,7 @@ void concat(char *string, char c) {
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     int cmp;
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
-    printf("Search Binary: [%d] [%s]\n", cmp, palavra);
+    // printf("Search Binary: [%d] [%s]\n", cmp, palavra);
     if(cmp == 0) //ACHOU
         return (ini + fim)/2;
     if(cmp < 0) {
@@ -65,7 +65,6 @@ char desconcat(char *string){
     if(size > 0) {
     	string[size - 1] = '\0';
 	}
-
     return c;
 }
 

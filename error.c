@@ -9,58 +9,58 @@ void error_message(int flag, int line_number, int coluna_number)
     switch (flag)
     {
     case ERROR_STACK_FULL:
-        printf("Error: endereço maior do que o permitido no vetor... \n", line_number, coluna_number);
+        printf("Error: endereco maior do que o permitido no vetor... \n", line_number, coluna_number);
         exit(1);
 	case ERROR_STACK_EMPTY:
         printf("Error: endereco abaixo do permitido no vetor... \n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_FECHA_APOSTROFO:
-        printf("Error: esperava-se um apostrofo %d e coluna %d\n", line_number, coluna_number);
+        printf("Error: esperava-se um apostrofo na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_ENDVAR:
-        printf("Error: esperava-se um endvar %d e coluna %d\n", line_number, coluna_number);
+        printf("Error: esperava-se um endvar na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ERROR_SINTATICO:
-        printf("Error: esperava-se que fosse um identificador %d e coluna %d\n", line_number, coluna_number);
+        printf("Error: esperava-se que fosse um identificador na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_ID:
-        printf("Esperado identificador na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Esperado identificador na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_FECHA_PAREN:
-        printf("Esperado ')' na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Esperado ')' na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_PT:
-        printf("';' Esperado na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("';' Esperado na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_ABRE_PAREN:
-        printf("Esperado '(' na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Esperado '(' na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_CLOSE_KEY:
-        printf("'}' Esperado na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("'}' Esperado na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_ABRE_KEY:
-        printf("'{' Esperado na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("'{' Esperado na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_CMD:
-        printf("Comando esperado na linha %d e coluna %d\n ", line_number, coluna_number);
+        printf("Comando esperado na linha [%d] e coluna [%d]\n ", line_number, coluna_number);
         exit(1);
     case ESPERANDO_IGUAL_SNG:
-        printf("Esperado sinal '=' na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Esperado sinal '=' na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case NAO_INDENTIFICADO:
-        printf("Simbolo nao identificado na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Simbolo nao identificado na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_TIPO:
-        printf("Erro esperado tipo na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Erro esperado tipo na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case RETORNO_ESPERADO:
-        printf("Retorno esperado na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Retorno esperado na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ATRIBUICAO_INVALIDA:
-        printf("Atribuicao invalida na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Atribuicao invalida na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_VIRGULA:
-        printf("Erro esperado ',' na linha %d e coluna %d\n", line_number, coluna_number);
+        printf("Erro esperado ',' na linha [%d] e coluna [%d]\n", line_number, coluna_number);
         exit(1);
     case ERRO_PASSAGEM_ARQUIVO:
         printf("Voce deve indicar um arquivo para ser analisado.");
@@ -72,7 +72,7 @@ void error_message(int flag, int line_number, int coluna_number)
         printf("Esperado um nï¿½mero apï¿½s ");
         exit(1);
     case FINAL_DO_ARQUIVO:
-        printf("Final do arquivo (%d)\n", line_number);
+        printf("Final do arquivo ([%d])\n", line_number);
         exit(1);
 	}
     exit(1);
