@@ -4,6 +4,7 @@
 
 int coluna = 0, linha = 0;
 FILE *codFonte;
+Token token;
 
 int get_linha() {
 	return linha;
@@ -24,7 +25,7 @@ int isPalavraRes(char *s){
 }
 
 char getCaracter(){
-    char c = fgetc(p);
+    char c = fgetc(codFonte);
     if (c == '\n') {
         linha++;
         coluna = 0;
@@ -43,10 +44,10 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
     cmp = strcmp(palavra, palavrasRes[(ini+fim)/2]);
     printf("Search Binary: [%d] [%s]\n", cmp, palavra);
     if(cmp == 0) //ACHOU
-        return (ini + fim)/2;    
+        return (ini + fim)/2;
     if(cmp < 0) {
         // palavra menor que a metade
-        if(ini >= fim) 
+        if(ini >= fim)
             return -1;
         return buscaBinaria(palavra, palavrasRes,ini , ((ini+fim)/2) -1);
     }
@@ -64,7 +65,7 @@ char desconcat(char *string){
     if(size > 0) {
     	string[size - 1] = '\0';
 	}
-	
+
     return c;
 }
 
@@ -93,9 +94,9 @@ void clearBuffer(char *buffer) {
 }
 
 FILE* openFile() {
-	printf("****************************************************************************\n
-            *   ============================ OPEN FILE =============================   *\n
-            ****************************************************************************\n\n");
+	printf("****************************************************************************\n");
+    printf("*   ============================ OPEN FILE =============================   *\n");
+    printf("****************************************************************************\n\n");
     codFonte = fopen("teste.txt", "r");
     if (codFonte == NULL) {
         printf("erro ao abrir o arquivo\n");
@@ -113,7 +114,7 @@ Token verifyToken() {
         {
             case 0:
                 c = getCaracter();
-                concat(buffer, c);                
+                concat(buffer, c);
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -178,7 +179,7 @@ Token verifyToken() {
             case 3:
                 c = getCaracter();
                 if(isdigit(c)) {
-                	concat(buffer, c);             
+                	concat(buffer, c);
                 }else if (c ==  '.') {
                     concat(buffer, c);
                     estado = 4;
@@ -186,7 +187,7 @@ Token verifyToken() {
                 break;
             case 4:
                 c = getCaracter();
-                if(isdigit(c)) {                    
+                if(isdigit(c)) {
                     concat(buffer, c);
                 }else {
                     //volta um caracter do arquivo e vai para o estado 5
@@ -229,13 +230,13 @@ Token verifyToken() {
                 //FINAL MENOR IGUAL
                 return createToken(OP,buffer);
             case 11:
-                //FINAL MENOR 
+                //FINAL MENOR
                 desconcat(buffer);
                 break;
             case 12:
                 c = getCaracter();
                 if(c == '=') {
-                    concat(buffer, c);  
+                    concat(buffer, c);
                     estado = 13;
                 }else {
                     desconcat(buffer);
@@ -262,7 +263,7 @@ Token verifyToken() {
                 }else if (c == 'n'){
                     concat(buffer, c);
                     estado = 25;
-                } 
+                }
 				else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 17:
@@ -284,7 +285,7 @@ Token verifyToken() {
             case 19:
                 c = getCaracter();
                 if(c == '.') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 20;
                 }
                 else error_message(ESPERANDO_ID, linha, coluna);
@@ -295,7 +296,7 @@ Token verifyToken() {
             case 21:
                 c = getCaracter();
                 if(c == 'r') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 22;
                 }
 				else error_message(ESPERANDO_ID, linha, coluna);
@@ -303,14 +304,14 @@ Token verifyToken() {
             case 22:
                 c = getCaracter();
                 if(c == '.') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 26;
                 }
                 break;
             case 23:
                 c = getCaracter();
                 if(c == 'o') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 24;
                 }
                 else error_message(ESPERANDO_ID, linha, coluna);
@@ -318,7 +319,7 @@ Token verifyToken() {
             case 24:
                 c = getCaracter();
                 if(c == 't') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 25;
                 }
                 else error_message(ESPERANDO_ID, linha, coluna);
@@ -326,7 +327,7 @@ Token verifyToken() {
             case 25:
                 c = getCaracter();
                 if(c == '.') {
-                    concat(buffer, c);                    
+                    concat(buffer, c);
                     estado = 20;
                 }
 				else error_message(ESPERANDO_ID, linha, coluna);
@@ -339,7 +340,7 @@ Token verifyToken() {
                 return createToken(OP, buffer);
             case 28:
                 c = getCaracter();
-                if(c == '=') {                    
+                if(c == '=') {
                     concat(buffer, c);
                     estado = 29;
                 }else estado = 30;
