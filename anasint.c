@@ -19,11 +19,20 @@ void my_pop(){
         free(v.[v.top]simbolo);
 }
 
-simbolo findSymbol(){
-    do{
+simbolo findSymbol(simbolo t){
+    int tmp = -1;
+    int atual = v.top;
+    while(1){
+        tmp = strcmp(t.nome, v[atual].nome) && v[atual].escopo == t.escopo
+            && strcmp(v[atual].categoria, t.categoria) && strcmp(v[atual].tipo, t.tipo);
+        if(tmp == 0)return atual;
+        if(atual == -1)return -1;
+   }
+}
 
-    }while(v[top].simbolo):
-
+bool type(){
+ return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR
+                             || token.cat == BOOL));
 }
 
 void var(){
