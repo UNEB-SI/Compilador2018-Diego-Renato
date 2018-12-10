@@ -38,7 +38,7 @@ simbolo findSymbol(simbolo t){
 }
 
 bool type() {
- return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == BOOL));
+    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == BOOL));
 }
 
 int next_token() {
@@ -53,15 +53,15 @@ void check_var() {
             while(next_token() && token.cat == OP && strcmp(token.s, ",") == 0) {
                 next_token();
                 if(!token.cat == ID) {
-                    error_message(ERROR_SINTATICO, linha);
+                    error_message(ERROR_SINTATICO, linha, coluna);
                 }
             }
 
             if(token.cat != PR && strcmp(token.s, "endvar") != 0) {
-                error_message(ESPERANDO_ENDVAR, linha);
+                error_message(ESPERANDO_ENDVAR, linha, coluna);
             }
         } else {
-            error_message(ERROR_SINTATICO, linha);
+            error_message(ERROR_SINTATICO, linha, coluna);
         }
     }
     next_token();
@@ -70,7 +70,7 @@ void check_var() {
 int check_declaration_var() {
     next_token();
     if(!token.cat == ID) {
-        error_message(ERROR_SINTATICO, linha);
+        error_message(ERROR_SINTATICO, linha, coluna);
     }
     return 1;
 }
@@ -79,13 +79,13 @@ int check_param() {
     if(type()) {
         next_token();
         if(!token.cat == ID) {
-            error_message(ERROR_SINTATICO, linha);
+            error_message(ERROR_SINTATICO, linha, coluna);
         }
 
         while(next_token() && strcmp(token.s, ",") == 0 && token.cat == OP) {
             next_token();
             if(!token.cat == ID) {
-                error_message(ERROR_SINTATICO, linha);
+                error_message(ERROR_SINTATICO, linha, coluna);
             }
         }
     }
@@ -95,6 +95,19 @@ int check_param() {
 int check_function() {
 
 }
+
+int check_op_rel() {
+    if (token.cat == LOG && (strcmp(token.s, "==") == 0 
+        || strcmp(token.s, "#") == 0 || strcmp(token.s, "<=") == 0 
+        || strcmp(token.s, "=>") == 0 strcmp(token.s, ">=") == 0 
+        || strcmp(token.s, "<") == 0 || strcmp(token.s, ">") == 0 )
+        ) {
+        return 1;
+    }
+    return 0;
+}
+
+
 
 int check_term() {
     next_token();
