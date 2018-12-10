@@ -22,7 +22,9 @@ enum code_error
   ERRO_ARQUIVO_NAO_ENCONTRADO,
   ERRO_NUMERO_FLOAT_FORMAT,
   FINAL_DO_ARQUIVO,
-  ERROR_SINTATICO
+  ERROR_SINTATICO,
+  ERROR_STACK_FULL,
+  ERROR_STACK_EMPTY
 };
 
 void error_message(int flag, int line_number, int coluna_number);

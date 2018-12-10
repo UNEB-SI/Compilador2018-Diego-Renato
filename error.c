@@ -8,6 +8,12 @@ void error_message(int flag, int line_number, int coluna_number)
 {
     switch (flag)
     {
+    case ERROR_STACK_FULL:
+        printf("Error: endereço maior do que o permitido no vetor... \n", line_number, coluna_number);
+        exit(1);
+	case ERROR_STACK_EMPTY:
+        printf("Error: endereco abaixo do permitido no vetor... \n", line_number, coluna_number);
+        exit(1);
     case ESPERANDO_FECHA_APOSTROFO:
         printf("Error: esperava-se um apostrofo %d e coluna %d\n", line_number, coluna_number);
         exit(1);
@@ -36,10 +42,10 @@ void error_message(int flag, int line_number, int coluna_number)
         printf("'{' Esperado na linha %d e coluna %d\n", line_number, coluna_number);
         exit(1);
     case ESPERANDO_CMD:
-        printf("Comando esperado na linha %d e coluna %d\n ", line_numbe, coluna_numberr);
+        printf("Comando esperado na linha %d e coluna %d\n ", line_number, coluna_number);
         exit(1);
     case ESPERANDO_IGUAL_SNG:
-        printf("Esperado sinal '=' na linha %d e coluna %d\n", line_number);, coluna_number
+        printf("Esperado sinal '=' na linha %d e coluna %d\n", line_number, coluna_number);
         exit(1);
     case NAO_INDENTIFICADO:
         printf("Simbolo nao identificado na linha %d e coluna %d\n", line_number, coluna_number);

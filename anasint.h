@@ -1,23 +1,21 @@
-#include "analex.h"
+#ifndef ANASINT_H
+#define ANASINT_H
 
+#include "analex.h"
+#include "error.h"
+
+#define TAMMAX 200
 
 typedef struct{
     int escopo;
     char nome[20];
-    char categoria[10];
+    char cat[10];
     char tipo[10];
-}simbolo;
+} simbolo;
 
 typedef struct{
     int topo;
-    simbolo simb;
-}meuvetor;
+    simbolo simb[200];
+} meuvetor;
 
-void freevetor(meuvetor *v){
-    for(int i=0; i<v.total;i++)
-        free (v[i].simb);
-}
-
-void my_push(simb p){
-
-}
+#endif

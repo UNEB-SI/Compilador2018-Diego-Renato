@@ -8,7 +8,7 @@ int main(int argc, char *argv[]) {
 	Token newToken;
 	FILE* codFonte = openFile();
 	while (1) {
-		newToken = verifyToken(codFonte);
+		newToken = verifyToken();
 		printf("\nResultado do Token: %d\n", newToken.cat);
 	}
 	return 0;

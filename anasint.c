@@ -1,16 +1,14 @@
 #include "anasint.h"
 
-void freevetor(meuvetor *v){
-    for(int i=0; i<v.total;i++)
-        free (v[i].simb);
-}
+Token token;
+meuvetor v; 
 
-void my_push(simbolo p, int top){
-   // if(top>=TAMMAX)erro;
-    //else{
-        v[++top].simbolo = p;
-        v.top++;
-    //}
+void my_push(simbolo p){
+    if(v.topo >= TAMMAX) error_message(ERROR_STACK_FULL, 0, 0);
+    else{
+    	++v.topo;
+        v.simb[v.topo] = p;
+    }
 }
 
 void newId(int escopo, char *nome, char *tipo, char *categoria) {
@@ -22,28 +20,32 @@ void newId(int escopo, char *nome, char *tipo, char *categoria) {
 }
 
 void my_pop(){
-    if(v.top>-1)
-        free(v.[v.top]simbolo);
+    if(v.topo > -1) {
+    	v.topo--;
+	} else {
+		error_message(ERROR_STACK_EMPTY, 0, 0);
+	}
 }
 
-simbolo findSymbol(simbolo t){
+// TODO: O retorno dessa função é int ou simbolo? Tava como simbolo mas retornava int...
+int findSymbol(simbolo t){
     int tmp = -1;
-    int atual = v.top;
-    while(1){
-        tmp = strcmp(t.nome, v[atual].nome) && v[atual].escopo == t.escopo
-            && strcmp(v[atual].categoria, t.categoria) && strcmp(v[atual].tipo, t.tipo);
-        if(tmp == 0)return atual;
-        if(atual == -1)return -1;
+    int atual = v.topo;
+    while(1) {
+        tmp = strcmp(t.nome, v.simb[atual].nome) && v.simb[atual].escopo == t.escopo
+            && strcmp(v.simb[atual].cat, t.cat) && strcmp(v.simb[atual].tipo, t.tipo);
+        if(tmp == 0) return atual;
+        if(atual == -1) return -1;
    }
-}
-
-int type() {
-    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == int));
 }
 
 int next_token() {
     token = verifyToken();
     return 1;
+}
+
+int type() {
+    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == INT));
 }
 
 void check_var() {
@@ -53,15 +55,15 @@ void check_var() {
             while(next_token() && token.cat == OP && strcmp(token.s, ",") == 0) {
                 next_token();
                 if(!token.cat == ID) {
-                    error_message(ERROR_SINTATICO, linha, coluna);
+                    error_message(ERROR_SINTATICO, get_linha(), get_coluna());
                 }
             }
 
             if(token.cat != PR && strcmp(token.s, "endvar") != 0) {
-                error_message(ESPERANDO_ENDVAR, linha, coluna);
+                error_message(ESPERANDO_ENDVAR, get_linha(), get_coluna());
             }
         } else {
-            error_message(ERROR_SINTATICO, linha, coluna);
+            error_message(ERROR_SINTATICO, get_linha(), get_coluna());
         }
     }
     next_token();
@@ -70,7 +72,7 @@ void check_var() {
 int check_declaration_var() {
     next_token();
     if(!token.cat == ID) {
-        error_message(ERROR_SINTATICO, linha, coluna);
+        error_message(ERROR_SINTATICO, get_linha(), get_coluna());
     }
     return 1;
 }
@@ -79,13 +81,13 @@ int check_param() {
     if(type()) {
         next_token();
         if(!token.cat == ID) {
-            error_message(ERROR_SINTATICO, linha, coluna);
+            error_message(ERROR_SINTATICO, get_linha(), get_coluna());
         }
 
         while(next_token() && strcmp(token.s, ",") == 0 && token.cat == OP) {
             next_token();
             if(!token.cat == ID) {
-                error_message(ERROR_SINTATICO, linha, coluna);
+                error_message(ERROR_SINTATICO, get_linha(), get_coluna());
             }
         }
     }
@@ -99,7 +101,7 @@ int check_function() {
 int check_op_rel() {
     if (token.cat == LOG && (strcmp(token.s, "==") == 0 
         || strcmp(token.s, "#") == 0 || strcmp(token.s, "<=") == 0 
-        || strcmp(token.s, "=>") == 0 strcmp(token.s, ">=") == 0 
+        || strcmp(token.s, "=>") == 0 || strcmp(token.s, ">=") == 0 
         || strcmp(token.s, "<") == 0 || strcmp(token.s, ">") == 0 )
         ) {
         return 1;
@@ -109,7 +111,7 @@ int check_op_rel() {
 
 int check_term() {
     next_token();
-    if(token.cat == OP && (strcmp(token.s, "*") == 0 || strcmp(token.s, "/") == 0) && (token.s == LOG || strcmp(token.s, "not") == 0)) {
+    if(token.cat == OP && (strcmp(token.s, "*") == 0 || strcmp(token.s, "/") == 0) && (token.cat == LOG || strcmp(token.s, "not") == 0)) {
         next_token();
     }
     return 1;
