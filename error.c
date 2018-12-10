@@ -8,6 +8,10 @@ void error_message(int flag, int line_number)
 {
     switch (flag)
     {
+    case ERROR_SINTATICO:
+        printf("Error: favor verificar a linha %d\n", line_number);
+        exit(1);
+        break;
     case ESPERANDO_ID:
         printf("Esperado identificador na linha %d\n", line_number);
         break;
@@ -54,7 +58,7 @@ void error_message(int flag, int line_number)
         printf("Arquivo nao encontrado!");
         break;
     case ERRO_NUMERO_FLOAT_FORMAT:
-        printf("Esperado um número após ");
+        printf("Esperado um nï¿½mero apï¿½s ");
         break;
     case FINAL_DO_ARQUIVO:
         printf("Final do arquivo (%d)\n", line_number);

@@ -19,7 +19,8 @@ enum code_error
   ERRO_PASSAGEM_ARQUIVO,
   ERRO_ARQUIVO_NAO_ENCONTRADO,
   ERRO_NUMERO_FLOAT_FORMAT,
-  FINAL_DO_ARQUIVO
+  FINAL_DO_ARQUIVO,
+  ERROR_SINTATICO
 };
 
 void error_message(int flag, int line_number);

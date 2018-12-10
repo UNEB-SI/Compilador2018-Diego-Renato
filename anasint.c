@@ -23,44 +23,30 @@ simbolo findSymbol(){
     do{
 
     }while(v[top].simbolo):
-
 }
 
-void var(){
+void check_var(){
+    while(type()) {
+        next_token();
+        if(token.cat == ID) {
+            while(next_token() && token.cat == OP) {
+                next_token();
+                if(!token.cat == ID) {
+                    error_message(ERROR_SINTATICO, linha);
+                }
+            }
+        }
+    }
 }
 
-bool declaration(){
+int check_declaration(){
 }
 
-bool param(){
+int check_param(){
 }
 
-bool function(){
+int check_function(){
 }
 
-bool procedure(){
-}
-
-bool factor(){
-}
-
-bool term(){
-}
-
-bool simple_expr(){
-}
-
-bool op_rel(){
-}
-
-bool expr(){
-}
-
-bool attribution(){
-}
-
-bool cmd(){
-}
-
-void prog(){
+int check_term(){
 }
