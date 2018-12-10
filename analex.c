@@ -152,7 +152,7 @@ Token verifyToken(FILE *codFonte) {
                 }else if(c == '\n') {
                     linha++; coluna = 0;
                     break;
-                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO, -1);
+                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO, -1, -1);
                 break;
             case 1:
             	c = getCaracter(codFonte, coluna, linha);
@@ -272,24 +272,21 @@ Token verifyToken(FILE *codFonte) {
 				else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 17:
-            	printf("Coluna: [17]\n", i);
                 c = getCaracter(codFonte, coluna, linha);
                 if(c == 'n'){
                     concat(buffer, c);
-                    
                     estado = 18;
                 }
-				else error_message( , linha, coluna);
+				else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 18:
-            	printf("Coluna: [18]\n", i);
                 c = getCaracter(codFonte, coluna, linha);
                 coluna++;
                 if(c == 'd') {
                     concat(buffer, c);
                     estado = 19;
                 }
-//				else error_message();
+                else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 19:
             	printf("Coluna: [19]\n", i);
@@ -299,7 +296,7 @@ Token verifyToken(FILE *codFonte) {
                     concat(buffer, c);                    
                     estado = 20;
                 }
-//				else error_message();
+                else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 20:
                 //FINAL .and.
@@ -311,7 +308,7 @@ Token verifyToken(FILE *codFonte) {
                     concat(buffer, c);                    
                     estado = 22;
                 }
-//				else error_message();
+				else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 22:
                 c = getCaracter(codFonte, coluna, linha);
@@ -328,7 +325,7 @@ Token verifyToken(FILE *codFonte) {
                     concat(buffer, c);                    
                     estado = 24;
                 }
-//				else error_message();
+                else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 24:
                 c = getCaracter(codFonte, coluna, linha);
@@ -337,7 +334,7 @@ Token verifyToken(FILE *codFonte) {
                     concat(buffer, c);                    
                     estado = 25;
                 }
-//				else error_message();
+                else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 25:
                 c = getCaracter(codFonte, coluna, linha);
@@ -346,7 +343,7 @@ Token verifyToken(FILE *codFonte) {
                     concat(buffer, c);                    
                     estado = 20;
                 }
-//				else error_message();
+				else error_message(ESPERANDO_ID, linha, coluna);
                 break;
             case 26:
                 //FINAL .OR.
