@@ -10,7 +10,7 @@ typedef struct{
 
 typedef struct{
     int topo;
-    simbolo simb;
+    simbolo simb[200];
 }meuvetor;
 
 void freevetor(meuvetor *v){
