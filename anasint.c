@@ -37,32 +37,69 @@ simbolo findSymbol(simbolo t){
    }
 }
 
-bool type(){
+bool type() {
  return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == BOOL));
 }
 
-int check_var(){
+int next_token() {
+    token = verifyToken();
+    return 1;
+}
+
+void check_var() {
     while(type()) {
         next_token();
         if(token.cat == ID) {
-            while(next_token() && token.cat == OP) {
+            while(next_token() && token.cat == OP && strcmp(token.s, ",") == 0) {
                 next_token();
                 if(!token.cat == ID) {
                     error_message(ERROR_SINTATICO, linha);
                 }
             }
+
+            if(token.cat != PR && strcmp(token.s, "endvar") != 0) {
+                error_message(ESPERANDO_ENDVAR, linha);
+            }
+        } else {
+            error_message(ERROR_SINTATICO, linha);
         }
     }
+    next_token();
 }
 
-int check_declaration(){
+int check_declaration_var() {
+    next_token();
+    if(!token.cat == ID) {
+        error_message(ERROR_SINTATICO, linha);
+    }
+    return 1;
 }
 
-int check_param(){
+int check_param() {
+    if(type()) {
+        next_token();
+        if(!token.cat == ID) {
+            error_message(ERROR_SINTATICO, linha);
+        }
+
+        while(next_token() && strcmp(token.s, ",") == 0 && token.cat == OP) {
+            next_token();
+            if(!token.cat == ID) {
+                error_message(ERROR_SINTATICO, linha);
+            }
+        }
+    }
+    return 1;
 }
 
-int check_function(){
+int check_function() {
+
 }
 
-int check_term(){
+int check_term() {
+    next_token();
+    if(token.cat == OP && (strcmp(token.s, "*") == 0 || strcmp(token.s, "/") == 0) && (token.s == LOG || strcmp(token.s, "not") == 0)) {
+        next_token();
+    }
+    return 1;
 }

@@ -8,8 +8,12 @@ void error_message(int flag, int line_number)
 {
     switch (flag)
     {
+    case ESPERANDO_ENDVAR:
+        printf("Error: esperava-se um endvar %d\n", line_number);
+        exit(1);
+        break;
     case ERROR_SINTATICO:
-        printf("Error: favor verificar a linha %d\n", line_number);
+        printf("Error: esperava-se que fosse um identificador %d\n", line_number);
         exit(1);
         break;
     case ESPERANDO_ID:
