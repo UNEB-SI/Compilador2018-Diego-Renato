@@ -37,8 +37,8 @@ simbolo findSymbol(simbolo t){
    }
 }
 
-bool type() {
-    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == BOOL));
+int type() {
+    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == int));
 }
 
 int next_token() {
@@ -106,8 +106,6 @@ int check_op_rel() {
     }
     return 0;
 }
-
-
 
 int check_term() {
     next_token();
