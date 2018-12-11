@@ -184,3 +184,91 @@ void start_Token(){
     token = verifyToken();
     tokenAhead = verifyToken();
 }
+
+
+int check_procedure(){
+    simbolo tmp;
+    if(token.cat == PR && token.n == PROC){
+        next_token()1;
+        if(token.cat != ID)
+            error_message(ESPERANDO_ID,linha,coluna);
+        newId(1, token.nome, token.cat, token.tipo);
+        my_push(tmp);
+        next_token();
+        if(token.cat != ABREPARENTESE)
+            error_message(ESPERANDO_ABRE_PAREN,linha,coluna);
+        next_token();
+        if(token.cat != FECHAPARENTESE)
+            error_message(ESPERANDO_FECHA_PAREN,linha,coluna);
+        while(decl()){
+            newId(1, token.nome, "Var", token.cat);
+            next_tonken();
+            while(token.cat == OP && token.n == VIRGULA){
+                next_token();
+                if(!identificador())
+                    error_message(ESPERANDO_ID,linha,coluna);//erro;
+                next_token();
+            }
+        }
+        while(check_cmd()){
+        }
+        if(!(token.cat == PR && token.n == ENDPROC))error_message(ESPERANDO_ENDPROC,linha,coluna);
+        next_token();
+        return 1;
+        }
+     else if(token.cat == PR && token.n == FWD){
+        next_token();
+        if(!(token.cat == PR && token.n == PROC))
+            error_message(ESPERANDO_PROC,linha, coluna);
+        next_token();
+        if(token.cat != ID)
+            error_message(ESPERANDO_ID, linha, coluna);
+        next_token();
+        if(token.cat != ABREPARENTESE)
+            error_message( ESPERANDO_ABRE_PAREN, linha, coluna );
+        next_token();
+        if(!(token.cat == PR && type()) )
+            error_message( ESPERANDO_FECHA_PAREN,linha,coluna );
+        while(next_token() && token.cat == OP && token.n == VIRGULA){
+            next_token();
+            if(!type())
+                error_message(ESPERANDO_TIPO,linha,coluna);
+        }
+        if(token.cat != FECHAPARENTESE)
+            error_message(ESPERANDO_FECHA_PAREN,linha,coluna);
+        next_token();
+        return 1;
+        }
+    return 0;
+}
+
+
+
+int check_cmd(){
+    if(token.cat == PR){
+        switch(token.n){
+        case CALL:
+            next_token();
+            if(token.cat != ID)error_message(ESPERANDO_ID,linha,coluna);
+            if(findSymbol(token.nome) == 0)
+                error_message(NAO_INDENTIFICADO, linha, coluna);
+            next_token();
+            if(!(token.cat == OP && token.n == ABREPARENTESE))
+                error_message(ESPERANDO_ABRE_PAREN, linha,coluna);
+            next_token();
+            if(check_exp()){
+                next_token();
+                while(token.cat == OP && token.n == VIRGULA){
+                    next_token();
+                    if(!check_exp())
+                        error_message(ESPERANDO_EXP,linha,coluna);
+                    next_token();
+                }
+            }
+            if(!(token.cat == OP && token.n == FECHAPARENTESE))
+                error_message(ESPERANDO_FECHA_PAREN, linha, coluna);
+            return 1;
+        }
+        case IF
+    }
+}
