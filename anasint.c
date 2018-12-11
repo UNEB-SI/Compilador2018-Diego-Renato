@@ -185,6 +185,18 @@ void start_Token(){
     tokenAhead = verifyToken();
 }
 
+int check_atrib() {
+    if(token.cat == ID) {
+        next_token();
+        if(token.n === IGUAL) {
+            if(!check_exp()) error_message(ESPERANDO_IGUAL_SNG, get_linha(), get_coluna());
+        } else {
+            error_message(ESPERANDO_IGUAL_SNG, get_linha(), get_coluna());
+        }
+    } else {
+        return 0;
+    }
+}
 
 int check_procedure(){
     simbolo tmp;
@@ -231,18 +243,15 @@ int check_procedure(){
             error_message( ESPERANDO_FECHA_PAREN,linha,coluna );
         while(next_token() && token.cat == OP && token.n == VIRGULA){
             next_token();
-            if(!type())
-                error_message(ESPERANDO_TIPO,linha,coluna);
+            if(!type()) error_message(ESPERANDO_TIPO, linha, coluna);
         }
         if(token.cat != FECHAPARENTESE)
-            error_message(ESPERANDO_FECHA_PAREN,linha,coluna);
+            error_message(ESPERANDO_FECHA_PAREN, linha, coluna);
         next_token();
         return 1;
         }
     return 0;
 }
-
-
 
 int check_cmd(){
     if(token.cat == PR){
