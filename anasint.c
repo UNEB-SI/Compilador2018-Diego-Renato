@@ -243,10 +243,10 @@ int check_procedure(){
 }
 
 
-
 int check_cmd(){
     if(token.cat == PR){
         switch(token.n){
+        //comando call
         case CALL:
             next_token();
             if(token.cat != ID)error_message(ESPERANDO_ID,linha,coluna);
@@ -269,6 +269,73 @@ int check_cmd(){
                 error_message(ESPERANDO_FECHA_PAREN, linha, coluna);
             return 1;
         }
-        case IF
+        //comando if
+        case IF:
+            next_token();
+            if(!(token.cat == OP && token.n == ABREPARENTESE))
+                error_message(ESPERANDO_ABRE_PAREN,linha,coluna);
+            next_token();
+            if(!check_exp())
+                error_message(ESPERANDO_EXP,linha,coluna);
+            if(!(token.cat == OP && token.n == FECHAPARENTESE))
+                error_message(ESPERANDO_FECHA_PAREN,linha,coluna);
+            while(check_cmd()){
+                next_token();
+            }
+            if(token.cat == PR && token.n == ELSE){
+                next_token();
+                if(!check_cmd())
+                    error_message(ESPERANDO_CMD,linha,coluna);
+                next_token();
+                while(check_cmd())
+                    next_token();
+            }
+            if(!(token.cat == PR && token.n == ENDELSE))
+                error_message(ESPERANDO_ENDELSE,linha,coluna);
+            return 1;
+        case FOR:
+            next_token();
+            if(!(token.cat == OP && token.n == ABREPARENTESE))
+                error_message(ESPERANDO_ABRE_PAREN,linha,coluna);
+            next_token();
+            if(!check_atrib())
+                error_message(ESPERANDO_ATRIB, linha, coluna);
+            next_token();
+            if(!(token.cat == OP && token.n == VIRGULA))
+                error_message(ESPERANDO_VIRGULA,linha,coluna);
+            next_token();
+            if(!check_exp())
+                error_message(ESPERANDO_EXP,linha,coluna);
+            next_token();
+            if(!(token.cat == OP && token.n == VIRGULA))
+                error_message(ESPERANDO_VIRGULA,linha,coluna);
+            next_token();
+            if(!check_atrib())
+                error_message(ESPERANDO_ATRIB, linha, coluna);
+            next_token();
+            if(!(token.cat == OP && token.n == FECHAPARENTESE))
+                error_message(ESPERANDO_FECHA_PAREN,linha,coluna);
+            next_token();
+            if(!check_cmd())
+                error_message(ESPERANDO_CMD, linha, coluna);
+            next_token();
+            while(check_cmd()){
+                next_token();
+            }
+            if(!(token.cat == PR && token.n == ENDFOR))
+                error_message(ESPERANDO_ENDFOR, linha, coluna);
+            return 1;
+        case WHILE:
+        //TODO
+        case RETURN:
+        //TODO
+        case KEYBOARD:
+        case DISPLAY:
+            
+
+
+
+
+
     }
 }
