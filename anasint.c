@@ -27,7 +27,7 @@ void my_pop(){
 	}
 }
 
-// TODO: O retorno dessa função é int ou simbolo? Tava como simbolo mas retornava int...
+// TODO: O retorno dessa funï¿½ï¿½o ï¿½ int ou simbolo? Tava como simbolo mas retornava int...
 int findSymbol(simbolo t){
     int tmp = -1;
     int atual = v.topo;
@@ -40,12 +40,13 @@ int findSymbol(simbolo t){
 }
 
 int next_token() {
-    token = verifyToken();
+    token = tokenAhead;
+    tokenAhead = verifyToken();
     return 1;
 }
 
 int type() {
-    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR || token.cat == INT));
+    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR));
 }
 
 void check_var() {
@@ -95,17 +96,79 @@ int check_param() {
 }
 
 int check_function() {
+    next_token();
+    if (!token.cat == ID) {
+        error_message(ERROR_SINTATICO, get_linha(), get_coluna());
+    } else {
+        if(token.n == ABREPARENTESE) {
+            next_token();
+            check_param();
+            if (token.n == FECHAPARENTESE) {
+                next_token();
+                // declarations
+                while(check_declaration()) {
+                    while(next_token() && token.n == VIRGULA) {
+                        next_token();
+                        if(!token.cat == ID) error_message(ESPERANDO_ID, get_linha(), get_coluna());
+                    }
+                }
+                // cmds
+                while(check_cmd());
+                if(token.n == ENDFUNC) {
+                    next_token();
+                    return 1;
+                } else {
+                    error_message(ERROR_ENDFUNC, get_linha(), get_coluna());
+                }
+            } else {
+                error_message(ESPERANDO_FECHA_PAREN, get_linha(), get_coluna());
+            }
+        } else {
+            error_message(ESPERANDO_ABRE_PAREN, get_linha(), get_coluna());
+        }
+    }
+}
 
+int check_func_or_fwd() {
+    if(type()) return check_function();
+    return check_fwd();
+}
+
+int check_fwd() {
+    next_token();
+    if(type()) {
+        next_token();
+        if (!token.cat == ID) {
+            error_message(ERROR_SINTATICO, get_linha(), get_coluna());
+        } else {
+            next_token();
+            if(token.n == ESPERANDO_ABRE_PAREN) {
+                next_token();
+                if(type()) {
+                    while(next_token() && token.n == VIRGULA) {
+                        if(!type()) {
+                            error_message(ESPERANDO_TIPO, get_linha(), get_coluna());
+                        }
+                    }
+                }
+
+                if(token.n == FECHAPARENTESE) {
+                    next_token();            
+                } else {
+                    error_message(ESPERANDO_FECHA_PAREN, get_linha(), get_coluna());
+                }
+            } else {
+                error_message(ESPERANDO_ABRE_PAREN, get_linha(), get_coluna());
+            }
+        }
+    } else {
+        return check_procedure();
+    }
+    return 0;
 }
 
 int check_op_rel() {
-    if (token.cat == LOG && (strcmp(token.s, "==") == 0 
-        || strcmp(token.s, "#") == 0 || strcmp(token.s, "<=") == 0 
-        || strcmp(token.s, "=>") == 0 || strcmp(token.s, ">=") == 0 
-        || strcmp(token.s, "<") == 0 || strcmp(token.s, ">") == 0 )
-        ) {
-        return 1;
-    }
+    if (token.cat == LOG && token.n < 5) return 1;
     return 0;
 }
 
@@ -115,4 +178,9 @@ int check_term() {
         next_token();
     }
     return 1;
+}
+
+void start_Token(){
+    token = verifyToken();
+    tokenAhead = verifyToken();
 }

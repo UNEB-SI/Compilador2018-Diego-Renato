@@ -8,6 +8,9 @@ void error_message(int flag, int line_number, int coluna_number)
 {
     switch (flag)
     {
+    case ERROR_ENDFUNC:
+        printf("Error: falta endfunc na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
+        exit(1);
     case ERROR_STACK_FULL:
         printf("Error: endereco maior do que o permitido no vetor... \n", line_number, coluna_number);
         exit(1);
