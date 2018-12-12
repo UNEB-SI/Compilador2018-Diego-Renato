@@ -266,7 +266,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 25;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 17:
                 c = getCaracter();
@@ -274,7 +274,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 18;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 18:
                 c = getCaracter();
@@ -282,7 +282,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 19;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 19:
                 c = getCaracter();
@@ -290,7 +290,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 20;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 20:
                 //FINAL .and.
@@ -301,7 +301,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 22;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 22:
                 c = getCaracter();
@@ -316,7 +316,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 24;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 24:
                 c = getCaracter();
@@ -324,7 +324,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 25;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 25:
                 c = getCaracter();
@@ -332,7 +332,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 20;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 26:
                 //FINAL .OR.
@@ -392,7 +392,7 @@ Token verifyToken() {
 	                concat(buffer, c);
 	                estado = 41;
 				}else {
-					error_message(ESPERANDO_FECHA_APOSTROFO, linha, coluna);
+					error_message(ESPERANDO_FECHA_APOSTROFO);
 				}
 				break;
             case 41:
@@ -410,7 +410,7 @@ Token verifyToken() {
 	      	case 47:
                 return createToken(PONTO_VIRGULA, buffer);
             default:
-                error_message(FINAL_DO_ARQUIVO, linha, coluna);
+                error_message(FINAL_DO_ARQUIVO);
         }//fim switch
     } //fim while
 }
