@@ -8,15 +8,6 @@ void error_message(int flag, int line_number, int coluna_number)
 {
     switch (flag)
     {
-    case ERROR_ENDPROG:
-        printf("Error: FALTA endprog na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
-        exit(1);
-    case ERROR_NO_RESERVED_WORD:
-        printf("Error: FALTA A PALAVRA RESERVADA PL para iniciar na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
-        exit(1);
-    case ERROR_ENDFUNC:
-        printf("Error: falta endfunc na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
-        exit(1);
     case ERROR_STACK_FULL:
         printf("Error: endereco maior do que o permitido no vetor... \n", line_number, coluna_number);
         exit(1);
@@ -82,6 +73,45 @@ void error_message(int flag, int line_number, int coluna_number)
         exit(1);
     case FINAL_DO_ARQUIVO:
         printf("Final do arquivo ([%d])\n", line_number);
+        exit(1);
+    case ESPERANDO_PROC:
+      	printf("Erro esperado \"proc\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ENDPROC:
+   	printf("Erro esperado \"endproc\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_EXP:
+        printf("Erro esperado expressao na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ELSE:
+     	printf("Erro esperado \"else\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ENDELSE:
+     	printf("Erro esperado \"endelse\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ATRIB:
+     	printf("Erro esperado atribuicao na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ENDFOR:
+     	printf("Erro esperado \"endfor\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ENDWHILE:
+     	printf("Erro esperado \"endfor\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ID_OU_CT_NO_CMD_DISPLAY:
+     	printf("Erro esperado um ID ou uma constate em display na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ID_OU_CT_DUP:
+      	printf("Erro esperado ID ou constante ou DUP na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_ENDFUNC:
+     	printf("Erro esperado \"endfunc\" na linha %d\n", line_number);
+        exit(1);
+    case ESPERANDO_TERM:
+     	printf("Erro esperado termo na linha %d\n", line_number);
+        exit(1);
+    case  ESPERANDO_EXP_SIMPLES:
+        printf("Erro esperado expressao simples na linha %d\n", line_number);
         exit(1);
 	}
     exit(1);

@@ -409,10 +409,8 @@ Token verifyToken() {
             default:
                 error_message(FINAL_DO_ARQUIVO, linha, coluna);
         }//fim switch
-    } //fim while    
-}
-
-
-void close_file() {
+    } //fim while
     fclose(codFonte);
 }
+
+

@@ -6,7 +6,10 @@
 
 int main(int argc, char *argv[]) {
 	Token newToken;
-	start_Token();	
-	close_file();
+	FILE* codFonte = openFile();
+	while (1) {
+		newToken = verifyToken();
+		printf("\nResultado do Token: %d\n", newToken.cat);
+	}
 	return 0;
 }
