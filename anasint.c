@@ -223,9 +223,40 @@ int check_term() {
     return 1;
 }
 
-void start_Token(){
+void start_Token() {
     token = verifyToken();
     tokenAhead = verifyToken();
+
+    if (check_reserved() == PL) {
+        next_token();
+        if (token.cat == ID) {
+           next_token(); 
+           if (token.cat == VAR) {
+               next_token();
+               check_var();
+               next_token();
+           }
+           while(check_function() || check_procedure()) {
+               next_token();
+           }
+           if (token.cat == PROG) {
+               next_token();
+               if (check_cmd()) {
+                    next_token();
+                    while (cmd()) {
+                        next_token();
+                    }
+                    if (!(token.cat == ENDPROG)) {
+                        error_message(ERROR_ENDPROG, get_linha(), get_coluna());
+                    }
+               } else {
+                    error_message(ESPERANDO_CMD, get_linha(), get_coluna());
+               }
+           }
+        } else {
+            error_message(ERROR_NO_RESERVED_WORD, get_linha(), get_coluna());
+        }
+    }
 }
 
 int check_atrib() {
