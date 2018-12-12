@@ -1,8 +1,9 @@
 #include "analex.h"
 #include "error.h"
 #define TAM 20
+#define TAM_RES 25
 
-int coluna = -1, linha = 0;
+int coluna = 1, linha = 1;
 FILE *codFonte;
 Token token;
 
@@ -21,15 +22,11 @@ char palavrasRes[][TAM] = {
 };
 
 int isPalavraRes(char *s){
-    return buscaBinaria(s, palavrasRes, 0, TAM-1);
+    return buscaBinaria(s, palavrasRes, 0, TAM_RES);
 }
 
 char getCaracter(){
     char c = fgetc(codFonte);
-    if (c == '\n') {
-        linha++;
-        coluna = 0;
-    } else coluna++;
     return c;
 }
 
@@ -37,6 +34,7 @@ void concat(char *string, char c) {
     int size = strlen(string);
     string[size] = c;
     string[size + 1] = '\0';
+    coluna++;
 }
 
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
@@ -75,6 +73,7 @@ Token createToken(categoria type, void *buffer)
     if (type == ID) {
         strcpy(returnToken.s, (char *) buffer);
     } else if (type == PR) {
+        returnToken.n = buscaBinaria(buffer , palavrasRes, 0, TAM_RES);
         strcpy(returnToken.s, (char *) buffer);
     } else if (type == CT_I) {
         returnToken.n = atoi(buffer);
@@ -113,7 +112,6 @@ Token verifyToken() {
         {
             case 0:
                 c = getCaracter();
-                concat(buffer, c);
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -139,8 +137,10 @@ Token verifyToken() {
                 }else if (c == '*'){
                     estado = 37;
                 }else if (c == ' '){
+                    coluna--;
                     estado = 0;
                     clearBuffer(buffer);
+                    break;
                 }else if (c == '\''){
                     estado = 39;
                 } else if(c == '('){
@@ -156,9 +156,12 @@ Token verifyToken() {
                 }else if(c == ';'){
                     estado = 47;
                 }else if(c == '\n') {
-                    linha++; coluna = 0;
+                    linha++; 
+                    coluna = 1;
+                    estado = 0;
                     break;
                 }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO, -1, -1);
+                concat(buffer, c);
                 break;
             case 1:
             	c = getCaracter();
