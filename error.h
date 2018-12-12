@@ -24,7 +24,9 @@ enum code_error
   FINAL_DO_ARQUIVO,
   ERROR_SINTATICO,
   ERROR_STACK_FULL,
-  ERROR_STACK_EMPTY
+  ERROR_STACK_EMPTY,
+  ERROR_NO_RESERVED_WORD,
+  ERROR_ENDPROG
 };
 
 void error_message(int flag, int line_number, int coluna_number);

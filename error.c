@@ -8,6 +8,12 @@ void error_message(int flag, int line_number, int coluna_number)
 {
     switch (flag)
     {
+    case ERROR_ENDPROG:
+        printf("Error: FALTA endprog na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
+        exit(1);
+    case ERROR_NO_RESERVED_WORD:
+        printf("Error: FALTA A PALAVRA RESERVADA PL para iniciar na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
+        exit(1);
     case ERROR_ENDFUNC:
         printf("Error: falta endfunc na linha [%d] e coluna [%d]... \n", line_number, coluna_number);
         exit(1);
