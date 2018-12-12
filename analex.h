@@ -37,5 +37,6 @@ Token verifyToken();
 void concat(char *string, char c);
 int get_linha();
 int get_coluna();
+void close_file();
 
 #endif

@@ -409,8 +409,10 @@ Token verifyToken() {
             default:
                 error_message(FINAL_DO_ARQUIVO, linha, coluna);
         }//fim switch
-    } //fim while
-    fclose(codFonte);
+    } //fim while    
 }
 
 
+void close_file() {
+    fclose(codFonte);
+}
