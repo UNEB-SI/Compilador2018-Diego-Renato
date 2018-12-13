@@ -122,6 +122,8 @@ void error_message(int flag)
     case  ESPERANDO_EXP_SIMPLES:
         printf("Erro esperado expressao simples na linha %d\n", get_linha());
         exit(1);
+    case ESPERANDO_ENDIF:
+        printf("Erro esperado \"endif\" na linha %d",get_linha());
 	}
     exit(1);
 }

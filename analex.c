@@ -379,6 +379,7 @@ Token verifyToken() {
             case 30:
                 //FINAL ATRIBUICAO
                 desconcat(buffer);
+                ungetc(c,codFonte);
                 itoa(ATRIBUICAO, buffer, 10);
                 return createToken(OP, buffer);
             case 31:

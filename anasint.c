@@ -183,6 +183,7 @@ int check_exp(){
         if(!check_simp_exp())
             error_message(ESPERANDO_EXP_SIMPLES);
     }
+    printf("eh expressao\n");
     return 1;
 }
 
@@ -259,7 +260,6 @@ void start_Token() {
                check_var();
                next_token();
            }
-            printf("aaa\n\n");
            while(check_func_or_fwd()) {
                 printf("entrei no func ou fwd \n");
                next_token();
@@ -286,8 +286,10 @@ void start_Token() {
 
 int check_atrib() {
     printf("sera que e atrib\n");
+    printToken();
     next_token();
     if(token.cat == ID) {
+        printf("acerto mizeravi\n");
        return 1;
     } else {
         return 0;
@@ -353,6 +355,7 @@ int check_procedure(){
 
 
 int check_cmd(){
+    printf("checkpoint\n\n");
     if(token.cat == PR){
         printf("token no switch: ");
         printToken();
@@ -381,7 +384,7 @@ int check_cmd(){
             return 1;
         //comando if
         case IF:
-
+            printf("cmd if\n");
             next_token();
             if(!(token.cat == OP && token.n == ABREPARENTESE))
                 error_message(ESPERANDO_ABRE_PAREN);
@@ -392,16 +395,28 @@ int check_cmd(){
                 error_message(ESPERANDO_FECHA_PAREN);
             next_token();
             while(check_cmd()){
+
                 next_token();
+
             }
             if(token.cat == PR && token.n == ELSE){
+                    printf("else\n");
                 next_token();
                 if(!check_cmd())
                     error_message(ESPERANDO_CMD);
                 next_token();
-                while(check_cmd())
-                    next_token();
+                while( check_cmd()){
+                 next_token();
+                }
             }
+            printf("saiu de cmd\n");
+            printf("tem q ser endif: ");
+            printToken();
+            if(!(token.cat == PR && token.n == ENDIF)){
+                error_message(ESPERANDO_ENDIF);
+                printf("aaaaaaaaaaaaacarohlo");
+            }
+            next_token();
             return 1;
         case FOR:
             next_token();
@@ -456,12 +471,12 @@ int check_cmd(){
             return 1;
         case KEYBOARD:
             next_token();
-            if(!(token.n == ID))
+            if(!(token.cat == ID))
                 error_message(ESPERANDO_ID);
             next_token();
             while(token.cat == OP && token.n == VIRGULA){
                 next_token();
-                if(!(token.n == ID))
+                if(!(token.cat == ID))
                     error_message(ESPERANDO_ID);
                 next_token();
             }
@@ -501,8 +516,10 @@ int check_cmd(){
                 error_message(ESPERANDO_FECHA_PAREN);
             return 1;
         default:
+        printToken();
+        printf("   esse token nao e cmd\n");
           return 0;
-        }
+        }//end switch
     }
         //atribuiçao
         if(token.cat == ID){
