@@ -1,8 +1,9 @@
 #include "analex.h"
 #include "error.h"
 #define TAM 20
+#define TAM_RES 25
 
-int coluna = -1, linha = 0;
+int coluna = 1, linha = 1;
 FILE *codFonte;
 Token token;
 
@@ -14,22 +15,32 @@ int get_coluna() {
 	return coluna;
 }
 
-char palavrasRes[][TAM] = {
-    "bool", "call", "char", "display", "else", "endfor", "endif", "endproc",
-    "endprog", "endvar", "endwhile", "for", "fwd", "id", "if", "int", "keyboard",
-    "noparam", "pl", "proc", "prog", "real", "return", "var", "while"
+char opString[][TAM]={
+    "MAIS", "MENOS", "ABREPARENTESE", "FECHAPARENTESE",
+    "ABRECOLCHETE", "FECHACOLCHETE", "PONTO_VIRGULA",
+    "VIRGULA", "DIVISAO"
+};
+char LOGstring[][TAM]={
+ "MAIOR", "MENOR", "MENOROUIGUAL", "MAIROUIGUAL",
+ "HASTAG", "AND", "OR", "NOT","IGUAL"
 };
 
-int isPalavraRes(char *s){
-    return buscaBinaria(s, palavrasRes, 0, TAM-1);
+char palavrasRes[][TAM] = {
+    "bool", "call", "char", "display", "dup",
+    "else", "endfor", "endfunc", "endif", "endproc", "endprog",
+    "endvar", "endwhile", "for", "fwd",
+    "if", "int", "keyboard", "noparam", "pl",
+    "proc", "prog", "real", "return", "var", "while"
+};
+
+int isPalavraRes(char *s) {
+    int a = buscaBinaria(s, palavrasRes, 0, TAM_RES);
+    // printf("[%d]\n", a);
+    return a;
 }
 
 char getCaracter(){
     char c = fgetc(codFonte);
-    if (c == '\n') {
-        linha++;
-        coluna = 0;
-    } else coluna++;
     return c;
 }
 
@@ -37,6 +48,7 @@ void concat(char *string, char c) {
     int size = strlen(string);
     string[size] = c;
     string[size + 1] = '\0';
+    coluna++;
 }
 
 int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
@@ -55,7 +67,7 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
         //palavra maior que a metade
         if(ini >= fim)
             return -1;
-        return buscaBinaria(palavra,palavrasRes,((ini + fim)/2) +1, fim);
+        return buscaBinaria(palavra, palavrasRes,((ini + fim)/2) +1, fim);
     }
 }
 
@@ -75,7 +87,8 @@ Token createToken(categoria type, void *buffer)
     if (type == ID) {
         strcpy(returnToken.s, (char *) buffer);
     } else if (type == PR) {
-        strcpy(returnToken.s, (char *) buffer);
+        returnToken.n = atoi(buffer);
+        // strcpy(returnToken.s, (char *) buffer);
     } else if (type == CT_I) {
         returnToken.n = atoi(buffer);
     } else if (type == CT_R) {
@@ -83,8 +96,9 @@ Token createToken(categoria type, void *buffer)
     } else if (type == LOG) {
         returnToken.n = atoi(buffer);
     } else if (type == OP) {
-        strcpy(returnToken.s, (char *) buffer);
+        returnToken.n = atoi(buffer);
     }
+    printToken();
     return returnToken;
 }
 
@@ -113,7 +127,6 @@ Token verifyToken() {
         {
             case 0:
                 c = getCaracter();
-                concat(buffer, c);
                 if(isalpha(c)){
                     estado = 1;
                 }else if(isdigit(c)){
@@ -139,8 +152,10 @@ Token verifyToken() {
                 }else if (c == '*'){
                     estado = 37;
                 }else if (c == ' '){
+                    coluna--;
                     estado = 0;
                     clearBuffer(buffer);
+                    break;
                 }else if (c == '\''){
                     estado = 39;
                 } else if(c == '('){
@@ -156,9 +171,12 @@ Token verifyToken() {
                 }else if(c == ';'){
                     estado = 47;
                 }else if(c == '\n') {
-                    linha++; coluna = 0;
+                    linha++;
+                    coluna = 1;
+                    estado = 0;
                     break;
-                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO, -1, -1);
+                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO);
+                concat(buffer, c);
                 break;
             case 1:
             	c = getCaracter();
@@ -172,9 +190,9 @@ Token verifyToken() {
                 if(tmp == -1){
                 	return createToken(ID, buffer);
                 } else {
+                    itoa(tmp, buffer, 10);
                     return createToken(PR, buffer);
                 }
-                return token;
             case 3:
                 c = getCaracter();
                 if(isdigit(c)) {
@@ -227,10 +245,13 @@ Token verifyToken() {
                 break;
             case 10:
                 //FINAL MENOR IGUAL
-                return createToken(OP,buffer);
+                itoa(MENOROUIGUAL, buffer, 10);
+                return createToken(LOG,buffer);
             case 11:
                 //FINAL MENOR
                 desconcat(buffer);
+                itoa(MENOR, buffer, 10);
+                return createToken(LOG, buffer);
                 break;
             case 12:
                 c = getCaracter();
@@ -244,10 +265,12 @@ Token verifyToken() {
                 break;
             case 13:
                 //FINAL MAIOROUIGUAL
-                return createToken(OP,buffer);
+                itoa(MAIROUIGUAL, buffer, 10);
+                return createToken(LOG,buffer);
             case 14:
                 //FINAL MAIOR
-                return createToken(OP, buffer);
+                itoa(MAIOR, buffer, 10);
+                return createToken(LOG, buffer);
             case 15:
                 //FINAL MENOS
                 return createToken(OP,buffer);
@@ -263,7 +286,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 25;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 17:
                 c = getCaracter();
@@ -271,7 +294,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 18;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 18:
                 c = getCaracter();
@@ -279,7 +302,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 19;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 19:
                 c = getCaracter();
@@ -287,10 +310,11 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 20;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 20:
                 //FINAL .and.
+                itoa(AND, buffer, 10);
                 return createToken(LOG, buffer);
             case 21:
                 c = getCaracter();
@@ -298,7 +322,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 22;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 22:
                 c = getCaracter();
@@ -313,7 +337,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 24;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 24:
                 c = getCaracter();
@@ -321,7 +345,7 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 25;
                 }
-                else error_message(ESPERANDO_ID, linha, coluna);
+                else error_message(ESPERANDO_ID);
                 break;
             case 25:
                 c = getCaracter();
@@ -329,14 +353,16 @@ Token verifyToken() {
                     concat(buffer, c);
                     estado = 20;
                 }
-				else error_message(ESPERANDO_ID, linha, coluna);
+				else error_message(ESPERANDO_ID);
                 break;
             case 26:
                 //FINAL .OR.
+                itoa(OR, buffer, 10);
                 return createToken(LOG, buffer);
             case 27:
                 //FINAL  .NOT.
-                return createToken(OP, buffer);
+                itoa(NOT, buffer, 10);
+                return createToken(LOG, buffer);
             case 28:
                 c = getCaracter();
                 if(c == '=') {
@@ -346,7 +372,8 @@ Token verifyToken() {
                 break;
             case 29:
                 //FINAL ==
-                return createToken(OP, buffer);
+                itoa(IGUAL, buffer, 10);
+                return createToken(LOG, buffer);
             case 30:
                 //FINAL DIVISAO
                 desconcat(buffer);
@@ -389,28 +416,56 @@ Token verifyToken() {
 	                concat(buffer, c);
 	                estado = 41;
 				}else {
-					error_message(ESPERANDO_FECHA_APOSTROFO, linha, coluna);
+					error_message(ESPERANDO_FECHA_APOSTROFO);
 				}
 				break;
             case 41:
                 return createToken(CT_CH, buffer);
 	     	case 42:
-                return createToken(ABREPARENTESE, buffer);
+                itoa(ABREPARENTESE, buffer, 10);
+                return createToken(OP, buffer);
 	    	case 43:
-                return createToken(FECHAPARENTESE, buffer);
+                itoa(FECHAPARENTESE, buffer, 10);
+                return createToken(OP, buffer);
 	   		case 44:
-                return createToken(ABRECOLCHETE, buffer);
+                itoa(ABRECOLCHETE, buffer, 10);
+                return createToken(OP, buffer);
 	   		case 45:
-                return createToken(FECHACOLCHETE, buffer);
+                itoa(FECHACOLCHETE, buffer, 10);
+                return createToken(OP, buffer);
 	      	case 46:
-                return createToken(VIRGULA, buffer);
+                itoa(VIRGULA, buffer, 10);
+                return createToken(OP, buffer);
 	      	case 47:
-                return createToken(PONTO_VIRGULA, buffer);
+                itoa(PONTO_VIRGULA, buffer, 10);
+                return createToken(OP, buffer);
             default:
-                error_message(FINAL_DO_ARQUIVO, linha, coluna);
+                error_message(FINAL_DO_ARQUIVO);
         }//fim switch
     } //fim while
+}
+
+void close_file() {
     fclose(codFonte);
 }
 
+void printToken(){
+    if(token.cat ==PR){
+            printf("< PR , %s >\n",palavrasRes[token.n]);
+    }
+    else if(token.cat == ID)
+        printf("< ID , %s >\n",token.s);
+    else if(token.cat == OP)
+        printf("< OP , %s >\n",opString[token.n]);
+    else if(token.cat == CT_I)
+        printf("< INTEIRO, %d>\n",token.n);
+    else if(token.cat == CT_R)
+        printf("< REAL, %f>\n",token.r);
+    else if(token.cat == LOG)
+        printf("< log, %s>\n", LOGstring[token.n]);
 
+    else{
+        printf("< %d, %s>\n",token.cat,token.s);
+    }
+
+}
