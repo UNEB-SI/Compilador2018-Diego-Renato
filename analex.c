@@ -4,6 +4,7 @@
 #define TAM_RES 25
 
 int coluna = 1, linha = 1;
+char fileName[TAM];
 FILE *codFonte;
 Token token;
 
@@ -107,10 +108,14 @@ void clearBuffer(char *buffer) {
 }
 
 FILE* openFile() {
+    //coloque nome do arquivo sem a extensao .txt o arquivo deve estar na pasta do projeto
+	printf("Digite o nome do arquivo desejado: ");
+	scanf("%s",fileName);
 	printf("****************************************************************************\n");
     printf("*   ============================ OPEN FILE =============================   *\n");
     printf("****************************************************************************\n\n");
-    codFonte = fopen("teste.txt", "r");
+    strcat(fileName,".txt");
+    codFonte = fopen(fileName, "r");
     if (codFonte == NULL) {
         printf("erro ao abrir o arquivo\n");
         exit(-1);
