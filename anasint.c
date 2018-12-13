@@ -4,8 +4,18 @@ Token token;
 Token tokenAhead;
 meuvetor v;
 
+int linha_sint = 0, coluna_sint = 0;
+
+int get_coluna_sint() {
+    return coluna_sint;
+}
+
+int get_linha_sint() {
+    return linha_sint;
+}
+
 void my_push(simbolo p){
-    if(v.topo >= TAMMAX) error_message(ERROR_STACK_FULL, 0, 0);
+    if(v.topo >= TAMMAX) error_message(ERROR_STACK_FULL);
     else{
     	++v.topo;
         v.simb[v.topo] = p;
@@ -25,7 +35,7 @@ void my_pop(){
     if(v.topo > -1) {
     	v.topo--;
 	} else {
-		error_message(ERROR_STACK_EMPTY, 0, 0);
+		error_message(ERROR_STACK_EMPTY);
 	}
 }
 
@@ -40,9 +50,6 @@ int findSymbol(char *t){
    }
 }
 
-int type() {
-    return(token.cat == PR && (token.cat == INT || token.cat == REAL || token.cat == CHAR));
-}
 
 int check_declaration_var(simbolo *s) {
     *s = newId(0,"waiting","var",token.s);
@@ -173,12 +180,12 @@ int check_id(){
 int check_exp(){
     next_token();
     if(!check_simp_exp())
-        error_message(ESPERANDO_EXP_SIMPLES, get_linha(),get_coluna());
+        error_message(ESPERANDO_EXP_SIMPLES);
     next_token();
     if(check_op_rel()){
         next_token();
         if(!check_simp_exp())
-            error_message(ESPERANDO_EXP_SIMPLES, get_linha(),get_coluna());
+            error_message(ESPERANDO_EXP_SIMPLES);
     }
     return 1;
 }
@@ -196,32 +203,39 @@ int check_term() {
     return 1;
 }
 
+int type() {
+    return (token.cat == PR && (token.n == INT || token.n == REAL || token.n == CHAR));
+}
+
 int check_var() {
+        // printf("1[%s] [%d]\n", token.s, token.n);
     while(type()) {
         next_token();
-        if(token.cat == ID) {
-            while(next_token() && token.cat == OP && strcmp(token.s, ",") == 0) {
-                next_token();
-                if(!token.cat == ID) {
+        if(token.cat == ID) {     
+            next_token();
+            while(next_token() && token.cat == OP && token.n == VIRGULA) {              
+                if(!(token.cat == ID)) {
                     error_message(ERROR_SINTATICO);
                 }
-            }
-            if(token.cat != PR && strcmp(token.s, "endvar") != 0) {
-                error_message(ESPERANDO_ENDVAR);
             }
         } else {
             error_message(ERROR_SINTATICO);
         }
     }
     next_token();
+    if(!(token.cat == PR && token.n == ENDVAR)) {
+        error_message(ESPERANDO_ENDVAR);
+    }
+    // next_token();
     return 1;
 }
 
 int next_token() {
     token = tokenAhead;
-
+    linha_sint = get_linha();
+    coluna_sint = get_coluna();
     tokenAhead = verifyToken();
-    // printf("Token - Categoria: [%d], valor: [%s], linha: [%d] e coluna: [%d]\n", token.cat, token.s);
+    printf("Token - Categoria: [%d], valor: [%s], linha: [%d] e coluna: [%d]\n", token.cat, token.s, linha_sint, coluna_sint);
     return 1;
 }
 
@@ -229,7 +243,7 @@ void start_Token() {
     token = verifyToken();
     tokenAhead = verifyToken();
 
-    printf("Token Start: [%s] [%s]\n", token.s, tokenAhead.s);
+    // printf("Token Start: [%s] [%s]\n", token.s, tokenAhead.s);
 
     if (token.cat == PR) {
         next_token();
@@ -303,7 +317,7 @@ int check_procedure(){
         }
         while(check_cmd()){
         }
-        if(!(token.cat == PR && token.n == ENDPROC))error_message(ESPERANDO_ENDPROC);
+        if(!(token.cat == PR && token.n == ENDPROC)) error_message(ESPERANDO_ENDPROC);
         next_token();
         return 1;
         }
@@ -342,10 +356,10 @@ int check_cmd(){
             next_token();
             if(token.cat != ID)error_message(ESPERANDO_ID);
             if(findSymbol(token.s) == 0)
-                error_message(NAO_INDENTIFICADO,  get_linha(), get_coluna());
+                error_message(NAO_INDENTIFICADO);
             next_token();
             if(!(token.cat == OP && token.n == ABREPARENTESE))
-                error_message(ESPERANDO_ABRE_PAREN,  get_linha(), get_coluna());
+                error_message(ESPERANDO_ABRE_PAREN);
             next_token();
             if(check_exp()){
                 next_token();
@@ -380,16 +394,13 @@ int check_cmd(){
                 while(check_cmd())
                     next_token();
             }
-            if(!(token.cat == PR && token.n == ENDELSE))
-                error_message(ESPERANDO_ENDELSE);
-            return 1;
         case FOR:
             next_token();
             if(!(token.cat == OP && token.n == ABREPARENTESE))
                 error_message(ESPERANDO_ABRE_PAREN);
             next_token();
             if(!check_atrib())
-                error_message(ESPERANDO_ATRIB,  get_linha(), get_coluna());
+                error_message(ESPERANDO_ATRIB);
             next_token();
             if(!(token.cat == OP && token.n == VIRGULA))
                 error_message(ESPERANDO_VIRGULA);

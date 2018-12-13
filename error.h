@@ -43,5 +43,5 @@ enum code_error
   ERROR_ENDFUNC,
 };
 
-void error_message(int flag, int line_number, int coluna_number);
+void error_message(int flag);
 #endif // ERRO

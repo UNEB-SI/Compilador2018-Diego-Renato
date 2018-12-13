@@ -16,13 +16,17 @@ int get_coluna() {
 }
 
 char palavrasRes[][TAM] = {
-    "bool", "call", "char", "display", "else", "endfor", "endif", "endproc",
-    "endprog", "endvar", "endwhile", "for", "fwd", "id", "if", "int", "keyboard",
-    "noparam", "pl", "proc", "prog", "real", "return", "var", "while"
+    "bool", "call", "char", "display", "dup", 
+    "else", "endfor", "endfunc", "endif", "endproc", "endprog", 
+    "endvar", "endwhile", "for", "fwd", 
+    "if", "int", "keyboard", "noparam", "pl", 
+    "proc", "prog", "real", "return", "var", "while"
 };
 
-int isPalavraRes(char *s){
-    return buscaBinaria(s, palavrasRes, 0, TAM_RES);
+int isPalavraRes(char *s) {
+    int a = buscaBinaria(s, palavrasRes, 0, TAM_RES);
+    // printf("[%d]\n", a);
+    return a;
 }
 
 char getCaracter(){
@@ -53,7 +57,7 @@ int buscaBinaria(char *palavra, char palavrasRes[][TAM], int ini, int fim){
         //palavra maior que a metade
         if(ini >= fim)
             return -1;
-        return buscaBinaria(palavra,palavrasRes,((ini + fim)/2) +1, fim);
+        return buscaBinaria(palavra, palavrasRes,((ini + fim)/2) +1, fim);
     }
 }
 
@@ -73,8 +77,8 @@ Token createToken(categoria type, void *buffer)
     if (type == ID) {
         strcpy(returnToken.s, (char *) buffer);
     } else if (type == PR) {
-        returnToken.n = buscaBinaria(buffer , palavrasRes, 0, TAM_RES);
-        strcpy(returnToken.s, (char *) buffer);
+        returnToken.n = atoi(buffer);
+        // strcpy(returnToken.s, (char *) buffer);
     } else if (type == CT_I) {
         returnToken.n = atoi(buffer);
     } else if (type == CT_R) {
@@ -82,7 +86,7 @@ Token createToken(categoria type, void *buffer)
     } else if (type == LOG) {
         returnToken.n = atoi(buffer);
     } else if (type == OP) {
-        strcpy(returnToken.s, (char *) buffer);
+        returnToken.n = atoi(buffer);
     }
     return returnToken;
 }
@@ -160,7 +164,7 @@ Token verifyToken() {
                     coluna = 1;
                     estado = 0;
                     break;
-                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO, -1, -1);
+                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO);
                 concat(buffer, c);
                 break;
             case 1:
@@ -175,9 +179,9 @@ Token verifyToken() {
                 if(tmp == -1){
                 	return createToken(ID, buffer);
                 } else {
+                    itoa(tmp, buffer, 10);
                     return createToken(PR, buffer);
                 }
-                return token;
             case 3:
                 c = getCaracter();
                 if(isdigit(c)) {
@@ -398,17 +402,23 @@ Token verifyToken() {
             case 41:
                 return createToken(CT_CH, buffer);
 	     	case 42:
-                return createToken(ABREPARENTESE, buffer);
+                itoa(ABREPARENTESE, buffer, 10);
+                return createToken(OP, buffer);
 	    	case 43:
-                return createToken(FECHAPARENTESE, buffer);
+                itoa(FECHAPARENTESE, buffer, 10);
+                return createToken(OP, buffer);
 	   		case 44:
-                return createToken(ABRECOLCHETE, buffer);
+                itoa(ABRECOLCHETE, buffer, 10);
+                return createToken(OP, buffer);
 	   		case 45:
-                return createToken(FECHACOLCHETE, buffer);
+                itoa(FECHACOLCHETE, buffer, 10);
+                return createToken(OP, buffer);
 	      	case 46:
-                return createToken(VIRGULA, buffer);
+                itoa(VIRGULA, buffer, 10);
+                return createToken(OP, buffer);
 	      	case 47:
-                return createToken(PONTO_VIRGULA, buffer);
+                itoa(PONTO_VIRGULA, buffer, 10);
+                return createToken(OP, buffer);
             default:
                 error_message(FINAL_DO_ARQUIVO);
         }//fim switch
