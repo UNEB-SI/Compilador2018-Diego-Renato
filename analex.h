@@ -14,12 +14,12 @@ typedef enum{ ID, PR, OP, CT_I, CT_R, CT_CH, CT_S, LOG } categoria;
 typedef enum{
     MAIS, MENOS, ABREPARENTESE, FECHAPARENTESE,
     ABRECOLCHETE, FECHACOLCHETE, PONTO_VIRGULA,
-    VIRGULA, DIVISAO
+    VIRGULA, DIVISAO,ATRIBUICAO,MULTIPLICACAO
 } operador;
 
 typedef enum{
- MAIOR, MENOR, MENOROUIGUAL, MAIROUIGUAL,
- HASTAG, AND, OR, NOT,IGUAL
+ IGUAL, HASTAG, MAIOR, MENOR, MENOROUIGUAL, MAIROUIGUAL,
+  AND, OR, NOT
 }log;
 
 // PALAVRAS RESERVADAS
@@ -48,5 +48,5 @@ void concat(char *string, char c);
 int get_linha();
 int get_coluna();
 void close_file();
-void printToken();
+//void printToken();
 #endif

@@ -17,12 +17,12 @@ int get_coluna() {
 
 char opString[][TAM]={
     "MAIS", "MENOS", "ABREPARENTESE", "FECHAPARENTESE",
-    "ABRECOLCHETE", "FECHACOLCHETE", "PONTO_VIRGULA",
-    "VIRGULA", "DIVISAO"
+    "ABRECOLCHETE", "FECHACOLCHETE", "PONTO_VIRGULA","VIRGULA",
+     "DIVISAO", "ATRIBUICAO", "MULTIPLICACAO"
 };
 char LOGstring[][TAM]={
- "MAIOR", "MENOR", "MENOROUIGUAL", "MAIROUIGUAL",
- "HASTAG", "AND", "OR", "NOT","IGUAL"
+ "IGUAL", "HASTAG", "MAIOR", "MENOR", "MENOROUIGUAL", "MAIROUIGUAL",
+  "AND", "OR", "NOT"
 };
 
 char palavrasRes[][TAM] = {
@@ -98,7 +98,7 @@ Token createToken(categoria type, void *buffer)
     } else if (type == OP) {
         returnToken.n = atoi(buffer);
     }
-    printToken();
+    //printToken();
     return returnToken;
 }
 
@@ -231,6 +231,7 @@ Token verifyToken() {
                 break;
             case 8:
                 //FINAL MAIS
+                itoa(MAIS, buffer, 10);
                 return createToken(OP, buffer);
                 break;
             case 9:
@@ -273,6 +274,7 @@ Token verifyToken() {
                 return createToken(LOG, buffer);
             case 15:
                 //FINAL MENOS
+                itoa(MENOS, buffer, 10);
                 return createToken(OP,buffer);
             case 16:
                 c = getCaracter();
@@ -375,8 +377,9 @@ Token verifyToken() {
                 itoa(IGUAL, buffer, 10);
                 return createToken(LOG, buffer);
             case 30:
-                //FINAL DIVISAO
+                //FINAL ATRIBUICAO
                 desconcat(buffer);
+                itoa(ATRIBUICAO, buffer, 10);
                 return createToken(OP, buffer);
             case 31:
                 c = getCaracter();
@@ -400,11 +403,18 @@ Token verifyToken() {
                 estado = 0;
                 break;
             case 36:
+                //FINAL DIVISAO
+                desconcat(buffer);
+                itoa(DIVISAO, buffer, 10);
                 return createToken(OP, buffer);
             case 37:
-                break;
+                //FINAL MULTIPLICACAO
+                itoa(MULTIPLICACAO, buffer, 10);
+                return createToken(OP,buffer);
             case 38:
-                return createToken(OP, buffer);
+                //FINAL HASTAG
+                itoa(HASTAG, buffer, 10);
+                return createToken(LOG, buffer);
             case 39:
                 c = getCaracter();
                 concat(buffer, c);
@@ -462,7 +472,7 @@ void printToken(){
     else if(token.cat == CT_R)
         printf("< REAL, %f>\n",token.r);
     else if(token.cat == LOG)
-        printf("< log, %s>\n", LOGstring[token.n]);
+        printf("< LOG, %s>\n", LOGstring[token.n]);
 
     else{
         printf("< %d, %s>\n",token.cat,token.s);
