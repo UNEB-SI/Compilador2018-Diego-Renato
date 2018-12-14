@@ -124,6 +124,8 @@ void error_message(int flag)
         exit(1);
     case ESPERANDO_ENDIF:
         printf("Erro esperado \"endif\" na linha %d",get_linha());
+    case ESPERANDO_FATOR:
+        printf("Erro esperado fator na linha %d", get_linha_sint());
 	}
     exit(1);
 }

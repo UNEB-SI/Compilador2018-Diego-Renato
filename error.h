@@ -41,7 +41,8 @@ enum code_error
   ERROR_NO_RESERVED_WORD,
   ERROR_ENDPROG,
   ERROR_ENDFUNC,
-  ESPERANDO_ENDIF
+  ESPERANDO_ENDIF,
+  ESPERANDO_FATOR
 };
 
 void error_message(int flag);
