@@ -165,7 +165,8 @@ int check_simp_exp(){
             error_message(ESPERANDO_TERM);
     }else if(!check_term())
                 return 0;
-    while((token.cat == OP && (token.n == MAIS || token.n==MENOS)) || (token.cat == LOG && token.n == OR)){
+    while((tokenAhead.cat == OP && (tokenAhead.n == MAIS || tokenAhead.n==MENOS)) || (tokenAhead.cat == LOG && tokenAhead.n == OR)){
+        next_token();
         next_token();
         if(!check_term())
             error_message(ESPERANDO_TERM);
@@ -183,7 +184,6 @@ int check_exp(){
         if(!check_simp_exp())
             error_message(ESPERANDO_EXP_SIMPLES);
     }
-    printf("eh expressao\n");
     return 1;
 }
 
@@ -238,6 +238,10 @@ int check_var() {
 int next_token() {
     token = tokenAhead;
     printToken();
+    if(token.cat == -1){
+            error_message(FINAL_DO_ARQUIVO);
+            //EOF
+    }
     linha_sint = get_linha();
     coluna_sint = get_coluna();
     tokenAhead = verifyToken();
@@ -261,7 +265,6 @@ void start_Token() {
                next_token();
            }
            while(check_func_or_fwd()) {
-                printf("entrei no func ou fwd \n");
                next_token();
            }
            if (token.cat == PR && token.n == PROG) {
@@ -285,11 +288,9 @@ void start_Token() {
 }
 
 int check_atrib() {
-    printf("sera que e atrib\n");
     printToken();
     next_token();
     if(token.cat == ID) {
-        printf("acerto mizeravi\n");
        return 1;
     } else {
         return 0;
@@ -355,10 +356,7 @@ int check_procedure(){
 
 
 int check_cmd(){
-    printf("checkpoint\n\n");
     if(token.cat == PR){
-        printf("token no switch: ");
-        printToken();
         switch(token.n){
         //comando call
         case CALL:
@@ -384,7 +382,6 @@ int check_cmd(){
             return 1;
         //comando if
         case IF:
-            printf("cmd if\n");
             next_token();
             if(!(token.cat == OP && token.n == ABREPARENTESE))
                 error_message(ESPERANDO_ABRE_PAREN);
@@ -395,9 +392,7 @@ int check_cmd(){
                 error_message(ESPERANDO_FECHA_PAREN);
             next_token();
             while(check_cmd()){
-
                 next_token();
-
             }
             if(token.cat == PR && token.n == ELSE){
                     printf("else\n");
@@ -409,12 +404,8 @@ int check_cmd(){
                  next_token();
                 }
             }
-            printf("saiu de cmd\n");
-            printf("tem q ser endif: ");
-            printToken();
             if(!(token.cat == PR && token.n == ENDIF)){
                 error_message(ESPERANDO_ENDIF);
-                printf("aaaaaaaaaaaaacarohlo");
             }
             next_token();
             return 1;
@@ -457,7 +448,6 @@ int check_cmd(){
             next_token();
             if(!check_exp())
                 error_message(ESPERANDO_EXP);
-            next_token();
             if(!(token.cat == OP && token.n == FECHAPARENTESE))
                 error_message(ESPERANDO_FECHA_PAREN);
             next_token();
@@ -522,16 +512,16 @@ int check_cmd(){
         }//end switch
     }
         //atribuiçao
-        if(token.cat == ID){
-                printf("entrei aqui");
-            if(tokenAhead.cat == OP && tokenAhead.n == ATRIBUICAO){
-                next_token();
-                return check_atrib();
-            }
-            else return 0;
+    if(token.cat == ID){
+            printf("entrei aqui");
+        if(tokenAhead.cat == OP && tokenAhead.n == ATRIBUICAO){
+            next_token();
+            return check_atrib();
         }
-        if(token.cat == OP && token.n == PONTO_VIRGULA){
-            return 1;
-        }
-        return 0;
+        else return 0;
+    }
+    if(token.cat == OP && token.n == PONTO_VIRGULA){
+        return 1;
+    }
+    return 0;
 }

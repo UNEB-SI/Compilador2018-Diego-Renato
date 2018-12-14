@@ -98,8 +98,9 @@ Token createToken(categoria type, void *buffer)
         returnToken.n = atoi(buffer);
     } else if (type == OP) {
         returnToken.n = atoi(buffer);
-    }
-    //printToken();
+    }else if (type == -1){
+            returnToken.n = atoi(buffer);
+    }    //printToken();
     return returnToken;
 }
 
@@ -180,7 +181,11 @@ Token verifyToken() {
                     coluna = 1;
                     estado = 0;
                     break;
-                }else if (feof(codFonte)) error_message(FINAL_DO_ARQUIVO);
+                }else if (feof(codFonte)) {
+                    error_message(FINAL_DO_ARQUIVO);
+                    token.cat = -1;
+                    printf("eof reached\n");
+                }
                 concat(buffer, c);
                 break;
             case 1:
@@ -456,7 +461,8 @@ Token verifyToken() {
                 itoa(PONTO_VIRGULA, buffer, 10);
                 return createToken(OP, buffer);
             default:
-                error_message(FINAL_DO_ARQUIVO);
+                itoa(-1,buffer,10);
+                return createToken(-1,buffer);
         }//fim switch
     } //fim while
 }
